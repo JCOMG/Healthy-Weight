@@ -1,0 +1,4 @@
+from werkzeug.security import generate_password_hash
+u = User(username='js', email='js@b.com', password_hash = generate_password_hash('abc', salt_length=32))
+db.session.add(u)
+db.session.commit()

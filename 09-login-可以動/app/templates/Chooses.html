@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if product_name %}
+<p>Name: {{ product_name }}</p>
+<p>Carbohydrates: {{ carbohydrates }}g</p>
+<p>Fat: {{ fat }}g</p>
+<p>Protein: {{ protein }}g</p>
+<hr>
+<h3>Information：</h3>
+<p>Total_carbs: {{ total_carbs }}g</p>
+<p>Total_fat: {{ total_fat }}g</p>
+<p>Total_protein: {{ total_protein }}g</p>
+{% endif %}
+<form method="POST" action="/barcode">
+    <button type="submit" name="Choose" class="btn btn-danger"
+            onclick=" return confirm('u sure ?')"> Add
+    </button>
+</form>
+{% endblock %}

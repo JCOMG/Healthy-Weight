@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('get_food_data') }}" novalidate style="margin-left: 700px;">
+    <h1>Enter barcode( get nutrition information)</h1>
+    <label for="barcode">Barcode:</label>
+    <input type="text" id="barcode" name="barcode"placeholder="Search product name or Barcode">
+    <input type="submit" value="Search">
+</form>
+{% endblock %}

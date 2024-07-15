@@ -1,0 +1,108 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "Hello",
+        "Good day"
+      ],
+      "responses": [
+        "Hey :-)",
+        "Hello, how can I assist you today?",
+        "Hi there, what can I do for you?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "Goodbye",
+        "See you later"
+      ],
+      "responses": [
+        "Goodbye! Take care!",
+        "See you later! Stay healthy!",
+        "Bye! Come back again soon."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks",
+        "Thank you",
+        "That's helpful"
+      ],
+      "responses": [
+        "You're welcome!",
+        "Glad I could help!",
+        "Any time!"
+      ]
+    },
+    {
+      "tag": "health_advice",
+      "patterns": [
+        "Give me a health tip",
+        "How can I stay healthy?",
+        "Any health advice?"
+      ],
+      "responses": [
+        "Remember to drink plenty of water every day.",
+        "Regular exercise can improve your physical and mental health.",
+        "A balanced diet is essential for good health."
+      ]
+    },
+    {
+      "tag": "emotional_support",
+      "patterns": [
+        "I'm feeling sad",
+        "I need some support",
+        "Can you cheer me up?"
+      ],
+      "responses": [
+        "It's okay to feel sad sometimes. Take deep breaths and give yourself a break.",
+        "I'm here for you. Remember that it's okay to ask for help when you need it.",
+        "Think about something that makes you happy. Sometimes, a small distraction can help.",
+        "For more advice, you can visit Psychology Today at https://www.psychologytoday.com/."
+      ]
+    },
+    {
+      "tag": "Benefits of Protein",
+      "patterns": [
+        "How Much Protein Do We Need?",
+        "What Are the Best Sources of Protein?",
+        "How Do High-Protein Diets Affect You?",
+        "Tell me about protein",
+        "What are the benefits of protein?"
+      ],
+      "responses": [
+        "Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.",
+        "Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.",
+        "Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.",
+        "The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.",
+        "High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.",
+        "Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term."
+      ]
+    },
+    {
+      "tag": "Visceral Fat Information",
+      "patterns": [
+        "What is visceral fat?",
+        "What is fat?",
+        "How dangerous is visceral fat?",
+        "Tell me about the risks of visceral fat",
+        "How can I measure my visceral fat?",
+        "Ways to reduce visceral fat",
+        "What is the difference between visceral fat and subcutaneous fat?"
+      ],
+      "responses": [
+        "Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.",
+        "Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.",
+        "One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.",
+        "To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.",
+        "Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues."
+      ]
+    }
+  ]
+}

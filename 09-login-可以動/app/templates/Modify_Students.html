@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container m-3">
+    <form method="POST" action="" novalidate>
+        <table id="data" class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.student_id }}</td>
+                <td>{{ student.username}}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.firstname }}</td>
+                <td>{{ student.lastname }}</td>
+                <td>{{ student.active }}</td>
+                <td>
+                    <button type="submit" name="Modify" value="{{ student.student_id }}">
+                        Modify
+                    </button>
+                </td>
+            </tr>
+            {% for loan in student.loans %}
+
+            <tr>
+                <td>{{ loan._id }}</td>
+                <td>{{ loan.damage}}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

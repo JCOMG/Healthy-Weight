@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+
+    .form-container-registration {
+        background-color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        animation: blink 5s infinite;
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-group input {
+        width: calc(100% - 10px);
+        padding: 8px 5px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+
+
+    }
+
+    .form-group span {
+        color: red;
+        font-size: 0.9em;
+    }
+
+    .form-group button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #f7f7f7;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-group button:hover {
+        background-color: #45a049;
+    }
+
+    .google-login {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .google-login button {
+        width: auto;
+        padding: 10px 20px;
+        background-color: #db4437;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .google-login button:hover {
+        background-color: #c23321;
+    }
+</style>
+
+<div class="form-container-registration">
+    <h1>Register</h1>
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.username.label }}<br/>{{ form.username(size=20) }}<br/>
+            {% for error in form.username.errors %}
+            <span>[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}<br/>{{ form.email(size=20) }}<br/>
+            {% for error in form.email.errors %}
+            <span>[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}<br/>{{ form.password(size=20) }}<br/>
+            {% for error in form.password.errors %}
+            <span>[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.confirmpassword.label }}<br/>{{ form.confirmpassword(size=20) }}<br/>
+            {% for error in form.confirmpassword.errors %}
+            <span>[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">{{ form.submit() }}</div>
+    </form>
+    <div class="google-login">
+        <form action="/login_Google" method="POST">
+            <button type="submit">Google Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

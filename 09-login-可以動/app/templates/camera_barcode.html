@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barcode Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <style>
+        video {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<video id="video" width="640" height="480" autoplay></video>
+<button onclick="startScanner()">Start Scanning</button>
+<div id="scanner-container" style="display:none;"></div>
+
+
+<script>
+    // 初始化攝像頭捕捉功能
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }) // 使用前置攝像頭
+    .then(function(stream) {
+        var video = document.getElementById('video');
+        video.srcObject = stream;
+    })
+    .catch(function(error) {
+        console.log("Unable to access camera:", error);
+    });
+
+    function startScanner() {
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                    target: document.getElementById('scanner-container'), // 使用一个隐藏的 div 元素
+
+                constraints: {
+                    width: 640,
+                    height: 480,
+                    facingMode: "user" // 或使用 "environment" 來切換到後置攝像頭
+                },
+            },
+            decoder: {
+                readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"]
+            },
+            locate: true, // 启用条码定位
+                numOfWorkers: navigator.hardwareConcurrency // 根据硬件并行度设置工作线程数
+        }, function(err) {
+            if (err) {
+                console.error("Initialization error:", err);
+                return;
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+
+         Quagga.onProcessed(function(result) {
+                console.log('Processing frame...');
+                if (result) {
+                    if (result.boxes) {
+                        result.boxes.filter(function (box) {
+                            return box !== result.box;
+                        }).forEach(function (box) {
+                            console.log('Box:', box);
+                        });
+                    }
+                    if (result.box) {
+                        console.log('Box:', result.box);
+                    }
+                    if (result.codeResult) {
+                        console.log('Code result:', result.codeResult.code);
+                    }
+                }
+            });
+
+            Quagga.onDetected(function(data) {
+                console.log("Detected code:", data.codeResult.code);
+                fetch('/handle_barcode', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({code: data.codeResult.code})
+                })
+                .then(response => response.json())
+                .then(data => console.log('Success:', data))
+                .catch((error) => console.error('Error:', error));
+            });
+        }
+</script>
+</body>
+</html>

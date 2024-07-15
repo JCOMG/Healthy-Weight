@@ -1,0 +1,368 @@
+/* 自定義導覽列樣式 */
+        .custom-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #4f46e5; /* indigo-500 */
+            color: #f9fafb; /* gray-50 */
+            border-radius: 12px; /* rounded-xl */
+            transition: background-color 0.3s;
+            text-decoration: none; /* 確保連結樣式被移除 */
+        }
+        .custom-button:hover {
+            background-color: #4338ca; /* indigo-600 */
+        }
+        .custom-button svg {
+            width: 20px;
+            height: 20px;
+        }
+        .navbar-nav.right-buttons {
+            margin-left: auto; /* 將右側按鈕對齊到最右邊 */
+            display: flex;
+            gap: 20px; /* 按鈕之間的間距 */
+            padding-left: 450px; /* 調整這裡來增加按鈕距離右邊的距離 */
+        }
+        .navbar-right-container {
+            display: flex;
+            justify-content: flex-end;
+            width: 1000%;
+        }
+.navbar-custom {
+    background-color: #ffffff; /* 白色背景 */
+    border-bottom: 2px solid #007bff; /* 藍色底線 */
+}
+
+
+
+.navbar-custom .navbar-brand {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1rem;
+    color:  #ffffff; /* 深色文字 */
+    margin-right: 15px;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: #ffffff; /* 滑鼠懸停時白色文字 */
+    background-color: #ff5722; /* 滑鼠懸停時橙色背景 */
+    border-radius: 5px; /* 圓角效果 */
+}
+
+
+    body {
+        background-color: transparent; /* 透明背景，以顯示圖片 */
+        background-image: url('/static/profile_pics/health.jpg'); /* 替換為你圖片的實際路徑 */
+        background-size: cover; /* 讓圖片覆蓋整個背景 */
+        background-size: 60%; /* 縮小圖片，避免圖片過大 */
+        background-repeat: no-repeat; /* 避免圖片重複 */
+        background-position: left top; /* 圖片向左對齊，垂直居中 */
+    }
+    .custom-alert {
+        color: #ffffff; /* 文字顏色為白色 */
+        background-color: #f44336; /* 背景顏色為深紅色 */
+        padding: 10px; /* 內距 */
+        font-size: 16px; /* 文字大小 */
+        border-radius: 5px; /* 圓角邊框 */
+        margin: 10px 0; /* 頂部和底部的邊距 */
+    }
+
+/* 圖片和文字區域樣式 */
+.container {
+    padding-top: 20px;
+    padding-bottom: 50px;
+    margin-top: 300px; /* 增加与水果图片之间的间距 */
+
+}
+
+img.rounded-circle {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #007bff;
+}
+
+
+/* 頁尾樣式 */
+footer {
+    background-color: #f1f1f1;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.fruit-basket-container {
+    max-width: 500px;
+    margin: 0px auto; /* 調整上方間距以確保在導航欄下面 */
+    position: relative;
+    right: -400px;
+    background-color: rgba(255, 255, 255, 0.8); /* 添加背景色以提高可讀性 */
+    padding: 0px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left; /* 調整文本對齊方式 */
+}
+
+.form-group {
+    margin-top: 40px;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    width: 100%;
+}
+
+.form-container-login, .form-container-registration {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 500px; /* 向右移动表单容器 */
+    margin-bottom:100px;
+    padding: 1em;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-container-login h1, .form-container-registration h1 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.form-group {
+    margin-bottom: 1em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-check-input {
+    margin-right: 0.5em;
+}
+
+.form-check-label {
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.5em;
+    border: none;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-link {
+    background: none;
+    color: #007bff;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    padding: 0.5em 0;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.875em;
+}
+
+main.container {
+    width: 50%; /* 调整容器宽度 */
+}
+
+img.rounded-circle {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #007bff;
+}
+
+.brand-logo {
+    width: 80px; /* 调整宽度 */
+    height: 70px; /* 高度自动调整以保持比例 */
+    margin-right: 10px; /* 与文本之间的间距 */
+}
+
+
+
+<footer>
+ul {
+    margin: 0px;
+    padding: 100px;
+}
+.footer-section {
+  background: #000000;
+  position: relative;
+}
+.footer-cta {
+  border-bottom: 0px solid #E8E2AA;
+}
+.single-cta i {
+  color: #ff5e14;
+  font-size: 30px;
+  float: left;
+  margin-top: 8px;
+}
+.cta-text {
+  padding-left: 15px;
+  display: inline-block;
+}
+.cta-text h4 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.cta-text span {
+  color: #757575;
+  font-size: 15px;
+}
+.footer-content {
+  position: relative;
+  z-index: 2;
+}
+.footer-pattern img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 330px;
+  background-size: cover;
+  background-position: 100% 100%;
+}
+.footer-logo {
+  margin-bottom: 30px;
+}
+.footer-logo img {
+    max-width: 200px;
+}
+.footer-text p {
+  margin-bottom: 14px;
+  font-size: 14px;
+      color: #7e7e7e;
+  line-height: 28px;
+}
+.footer-social-icon span {
+  color: #fff;
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 20px;
+}
+.footer-social-icon a {
+  color: #fff;
+  font-size: 16px;
+  margin-right: 15px;
+}
+.footer-social-icon i {
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 38px;
+  border-radius: 50%;
+}
+.facebook-bg{
+  background: #3B5998;
+}
+.twitter-bg{
+  background: #55ACEE;
+}
+.google-bg{
+  background: #DD4B39;
+}
+.footer-widget-heading h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  position: relative;
+}
+.footer-widget-heading h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -15px;
+  height: 2px;
+  width: 50px;
+  background: #ff5e14;
+}
+.footer-widget ul li {
+  display: inline-block;
+  float: left;
+  width: 50%;
+  margin-bottom: 12px;
+}
+.footer-widget ul li a:hover{
+  color: #ff5e14;
+}
+.footer-widget ul li a {
+  color: #878787;
+  text-transform: capitalize;
+}
+.subscribe-form {
+  position: relative;
+  overflow: hidden;
+}
+.subscribe-form input {
+  width: 100%;
+  padding: 14px 28px;
+  background: #2E2E2E;
+  border: 1px solid #2E2E2E;
+  color: #fff;
+}
+.subscribe-form button {
+    position: absolute;
+    right: 0;
+    background: #ff5e14;
+    padding: 13px 20px;
+    border: 1px solid #ff5e14;
+    top: 0;
+}
+.subscribe-form button i {
+  color: #fff;
+  font-size: 22px;
+  transform: rotate(-6deg);
+}
+.copyright-area{
+  background: #202020;
+  padding: 25px 0;
+}
+.copyright-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #878787;
+}
+.copyright-text p a{
+  color: #ff5e14;
+}
+.footer-menu li {
+  display: inline-block;
+  margin-left: 20px;
+}
+.footer-menu li:hover a{
+  color: #ff5e14;
+}
+.footer-menu li a {
+  font-size: 14px;
+  color: #878787;
+}

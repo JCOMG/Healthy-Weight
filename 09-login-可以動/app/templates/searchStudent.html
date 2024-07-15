@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" action="" novalidate>
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.lastname.label }}<br/>{{ form.lastname(size=30) }}<br/>
+        {% for error in form.lastname.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div>{{ form.submit() }}</div>
+
+    {% if students %}
+    {% for student in students %}
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Active</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>{{ student.student_id }}</td>
+            <td>{{ student.username}}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.firstname }}</td>
+            <td>{{ student.lastname }}</td>
+            <td>{{ student.active }}</td>
+            <td>
+                    <button type="submit" name="toggleActive" value="{{ student.student_id }}">
+                        Toggle Active
+                    </button>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</form>
+{% endblock %}

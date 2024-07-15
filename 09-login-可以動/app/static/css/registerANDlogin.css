@@ -1,0 +1,119 @@
+
+
+.container {
+  border: 2px  #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19); /* 增加陰影 */
+  padding: 40px; /* 減少內邊距，讓內容更緊湊 */
+  background: linear-gradient(135deg, rgba(255, 213, 128, 0.5), rgba(255, 213, 128, 0.5)); /* 使用透明度讓背景顏色變淡 */
+  border-radius: 10px; /* 圓角邊框，讓盒子更柔和 */
+  position: fixed;
+  left: 50%;
+  right: 0;
+  margin: auto;
+  top: 50%;
+  transform: translate(-50%, -50%); /* 向左和向上移動 50% */
+  width: 100%; /* 使用視口單位確保響應式 */
+  height:80%;
+  overflow: auto; /* 當內容超出容器時，自動顯示滾動條 */
+  width: 90vw; /* 設置寬度為視窗寬度的90% */
+  max-width: 1200px; /* 設置最大寬度 */
+  height: 80vh; /* 設置高度為視窗高度的80% */
+  max-height: 90vh; /* 設置最大高度 */
+  overflow: auto; /* 當內容超出容器時，自動顯示滾動條 */
+  color: #000; /* 白色文字，與背景形成對比 */
+  font-family: 'Open Sans', sans-serif; /* 使用現代的無襯線字體 */
+
+}
+
+body {
+ background-image:url('/static/profile_pics/food.jpg');
+   background-size: cover; /* 確保圖片覆蓋整個背景 */
+}
+h1 {
+    text-align: left; /* 將文字對齊方式設置為左對齊 */
+    width: 200%; /* 設置為 100%，讓它不會超出容器的範圍 */
+    font-family: 'Open Sans Condensed', sans-serif; /* 設置字體 */
+    margin-bottom: 20px; /* 增加 margin 讓元素之間有更多間距 */
+    color: #fff; /* 將文字設置為白色，使其在深色背景上可見 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 增加文字陰影 */
+}
+h3 {
+    white-space: nowrap; /* 禁止自動換行 */
+    overflow: hidden; /* 隱藏超出的部分 */
+    text-overflow: ellipsis; /* 省略號顯示超出的部分 */
+    display: inline-block; /* 確保元素寬度與內容匹配 */
+}
+
+p{
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.input label{
+  font: bold 1.2rem serif;
+  display: table-cell;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.botao-calcular{
+  width: 290px;
+  height: 40px;
+  font: bold 1.2rem serif;
+  background: #000;
+  color: rgb(255,198,0);
+  outline: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 15px auto;
+   display: table-cell;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.resultado {
+  text-align: center;
+  width: 250px;
+  height: 40px;
+  margin-top: 20px;
+  border-radius: 5px;
+  font: italic 1rem serif;
+  box-shadow: 0 0 10px black;
+  background: #000;
+  color: rgb(255,198,0);
+  padding: 20px;
+  box-siring: border-box;
+  margin: 5px auto;
+}
+.resultado {
+   display: table-cell;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-group {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-control {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px; /* 增加底部邊距 */
+    box-shadow: none; /* 移除默認的陰影 */
+    border-radius: 5px; /* 圓角邊框 */
+}
+
+
+
+.hr{
+  width: 200%;
+  background: #000000;
+  border-bottom: 2Px solid
+
+}

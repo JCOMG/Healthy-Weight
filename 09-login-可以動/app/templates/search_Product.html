@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('search_product') }}" novalidate style="margin-left: 700px;">
+    <h1>Enter the product name to query food nutrition information</h1>
+    <label for="product_name">Product name:</label>
+    <input type="text" id="product_name" name="product_name" placeholder="EX：Coca Cola">
+    <input type="submit" value="Search">
+</form>
+{% endblock %}

@@ -1,0 +1,347 @@
+User: Hi
+Bot: Hey :-)
+
+User: Hi
+Bot: Hello, how can I assist you today?
+
+User: Hi
+Bot: Hi there, what can I do for you?
+
+User: Hey
+Bot: Hey :-)
+
+User: Hey
+Bot: Hello, how can I assist you today?
+
+User: Hey
+Bot: Hi there, what can I do for you?
+
+User: Hello
+Bot: Hey :-)
+
+User: Hello
+Bot: Hello, how can I assist you today?
+
+User: Hello
+Bot: Hi there, what can I do for you?
+
+User: Good day
+Bot: Hey :-)
+
+User: Good day
+Bot: Hello, how can I assist you today?
+
+User: Good day
+Bot: Hi there, what can I do for you?
+
+User: Bye
+Bot: Goodbye! Take care!
+
+User: Bye
+Bot: See you later! Stay healthy!
+
+User: Bye
+Bot: Bye! Come back again soon.
+
+User: Goodbye
+Bot: Goodbye! Take care!
+
+User: Goodbye
+Bot: See you later! Stay healthy!
+
+User: Goodbye
+Bot: Bye! Come back again soon.
+
+User: See you later
+Bot: Goodbye! Take care!
+
+User: See you later
+Bot: See you later! Stay healthy!
+
+User: See you later
+Bot: Bye! Come back again soon.
+
+User: Thanks
+Bot: You're welcome!
+
+User: Thanks
+Bot: Glad I could help!
+
+User: Thanks
+Bot: Any time!
+
+User: Thank you
+Bot: You're welcome!
+
+User: Thank you
+Bot: Glad I could help!
+
+User: Thank you
+Bot: Any time!
+
+User: That's helpful
+Bot: You're welcome!
+
+User: That's helpful
+Bot: Glad I could help!
+
+User: That's helpful
+Bot: Any time!
+
+User: Give me a health tip
+Bot: Remember to drink plenty of water every day.
+
+User: Give me a health tip
+Bot: Regular exercise can improve your physical and mental health.
+
+User: Give me a health tip
+Bot: A balanced diet is essential for good health.
+
+User: How can I stay healthy?
+Bot: Remember to drink plenty of water every day.
+
+User: How can I stay healthy?
+Bot: Regular exercise can improve your physical and mental health.
+
+User: How can I stay healthy?
+Bot: A balanced diet is essential for good health.
+
+User: Any health advice?
+Bot: Remember to drink plenty of water every day.
+
+User: Any health advice?
+Bot: Regular exercise can improve your physical and mental health.
+
+User: Any health advice?
+Bot: A balanced diet is essential for good health.
+
+User: I'm feeling sad
+Bot: It's okay to feel sad sometimes. Take deep breaths and give yourself a break.
+
+User: I'm feeling sad
+Bot: I'm here for you. Remember that it's okay to ask for help when you need it.
+
+User: I'm feeling sad
+Bot: Think about something that makes you happy. Sometimes, a small distraction can help.
+
+User: I'm feeling sad
+Bot: For more advice, you can visit Psychology Today at https://www.psychologytoday.com/.
+
+User: I need some support
+Bot: It's okay to feel sad sometimes. Take deep breaths and give yourself a break.
+
+User: I need some support
+Bot: I'm here for you. Remember that it's okay to ask for help when you need it.
+
+User: I need some support
+Bot: Think about something that makes you happy. Sometimes, a small distraction can help.
+
+User: I need some support
+Bot: For more advice, you can visit Psychology Today at https://www.psychologytoday.com/.
+
+User: Can you cheer me up?
+Bot: It's okay to feel sad sometimes. Take deep breaths and give yourself a break.
+
+User: Can you cheer me up?
+Bot: I'm here for you. Remember that it's okay to ask for help when you need it.
+
+User: Can you cheer me up?
+Bot: Think about something that makes you happy. Sometimes, a small distraction can help.
+
+User: Can you cheer me up?
+Bot: For more advice, you can visit Psychology Today at https://www.psychologytoday.com/.
+
+User: How Much Protein Do We Need?
+Bot: Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.
+
+User: How Much Protein Do We Need?
+Bot: Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.
+
+User: How Much Protein Do We Need?
+Bot: Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.
+
+User: How Much Protein Do We Need?
+Bot: The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.
+
+User: How Much Protein Do We Need?
+Bot: High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.
+
+User: How Much Protein Do We Need?
+Bot: Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term.
+
+User: What Are the Best Sources of Protein?
+Bot: Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.
+
+User: What Are the Best Sources of Protein?
+Bot: Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.
+
+User: What Are the Best Sources of Protein?
+Bot: Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.
+
+User: What Are the Best Sources of Protein?
+Bot: The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.
+
+User: What Are the Best Sources of Protein?
+Bot: High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.
+
+User: What Are the Best Sources of Protein?
+Bot: Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term.
+
+User: How Do High-Protein Diets Affect You?
+Bot: Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.
+
+User: How Do High-Protein Diets Affect You?
+Bot: Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.
+
+User: How Do High-Protein Diets Affect You?
+Bot: Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.
+
+User: How Do High-Protein Diets Affect You?
+Bot: The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.
+
+User: How Do High-Protein Diets Affect You?
+Bot: High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.
+
+User: How Do High-Protein Diets Affect You?
+Bot: Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term.
+
+User: Tell me about protein
+Bot: Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.
+
+User: Tell me about protein
+Bot: Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.
+
+User: Tell me about protein
+Bot: Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.
+
+User: Tell me about protein
+Bot: The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.
+
+User: Tell me about protein
+Bot: High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.
+
+User: Tell me about protein
+Bot: Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term.
+
+User: What are the benefits of protein?
+Bot: Your body needs protein to stay healthy and work the way it should. More than 10,000 types are found in everything from your organs to your muscles and tissues to your bones, skin, and hair.
+
+User: What are the benefits of protein?
+Bot: Protein is also a critical part of the processes that fuel your energy and carry oxygen throughout your body in your blood. It also helps make antibodies that fight off infections and illnesses and helps keep cells healthy and create new ones.
+
+User: What are the benefits of protein?
+Bot: Not getting enough protein in your diet can lead to health issues like muscle loss, while too much can lead to excess fat storage.
+
+User: What are the benefits of protein?
+Bot: The Dietary Guidelines for Americans recommend daily protein amounts: Children under 4: 13 grams, Children 4-8: 19 grams, Children 9-13: 34 grams, Women and girls 14 and over: 46 grams, Boys 14-18: 52 grams, Men 19 and over: 56 grams.
+
+User: What are the benefits of protein?
+Bot: High-quality sources of protein include fish, poultry, lean beef or pork, tofu, eggs, and dairy products. Plant-based sources include nuts, seeds, legumes, and grains.
+
+User: What are the benefits of protein?
+Bot: Be mindful with high-protein diets like the Atkins Diet and the Ketogenic Diet. They may work well in the short term but can have unhealthy side effects if followed long-term.
+
+User: What is visceral fat?
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: What is visceral fat?
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: What is visceral fat?
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: What is visceral fat?
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: What is visceral fat?
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: What is fat?
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: What is fat?
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: What is fat?
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: What is fat?
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: What is fat?
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: How dangerous is visceral fat?
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: How dangerous is visceral fat?
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: How dangerous is visceral fat?
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: How dangerous is visceral fat?
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: How dangerous is visceral fat?
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: Tell me about the risks of visceral fat
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: Tell me about the risks of visceral fat
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: Tell me about the risks of visceral fat
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: Tell me about the risks of visceral fat
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: Tell me about the risks of visceral fat
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: How can I measure my visceral fat?
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: How can I measure my visceral fat?
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: How can I measure my visceral fat?
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: How can I measure my visceral fat?
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: How can I measure my visceral fat?
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: Ways to reduce visceral fat
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: Ways to reduce visceral fat
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: Ways to reduce visceral fat
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: Ways to reduce visceral fat
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: Ways to reduce visceral fat
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.
+
+User: What is the difference between visceral fat and subcutaneous fat?
+Bot: Visceral fat is a type of body fat that's stored within the abdominal cavity. It's located near several vital organs, including the liver, stomach, and intestines, and can also build up in the arteries. Visceral fat is sometimes referred to as 'active fat' because it can actively increase the risk of serious health problems.
+
+User: What is the difference between visceral fat and subcutaneous fat?
+Bot: Having a high amount of visceral fat increases your risk of conditions such as heart disease, Alzheimer's, type 2 diabetes, stroke, and high cholesterol.
+
+User: What is the difference between visceral fat and subcutaneous fat?
+Bot: One way to estimate the amount of visceral fat you have is to measure your waist circumference with a tape measure. A waist measurement of 35 inches or more for women and 40 inches or more for men may indicate an unhealthy concentration of visceral fat.
+
+User: What is the difference between visceral fat and subcutaneous fat?
+Bot: To reduce visceral fat, engage in regular physical activity and eat a balanced diet that includes plenty of lean protein, vegetables, and whole grains. Avoid trans fats and high fructose corn syrup.
+
+User: What is the difference between visceral fat and subcutaneous fat?
+Bot: Visceral fat is more harmful than subcutaneous fat because it can secrete pro-inflammatory substances that directly affect your vital organs, making it a key player in a variety of health issues.

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask a Question</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Ask a Question</h1>
+    <form id="question-form">
+        <input type="text" name="question" placeholder="Enter your question here">
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Response:</h2>
+    <p id="response"></p>
+
+    <script>
+        $(document).ready(function(){
+            $('#question-form').on('submit', function(event){
+                event.preventDefault();
+                var question = $('input[name="question"]').val();
+                $.ajax({
+                    url: '/get_answer',
+                    method: 'POST',
+                    data: {question: question},
+                    success: function(data){
+                        $('#response').text(data.response);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+{% block content %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Nutrition Plan</h1>
+    <!-- 显示过滤后的数据 -->
+    <div class="Recommend-Breakfast">
+        <h2>Recommended Diet</h2>
+        <table border="1">
+            <tr>
+                <th>Recipe Name</th>
+                <th>Cuisine Type</th>
+                <th>Protein (g)</th>
+                <th>Carbs (g)</th>
+                <th>Fat (g)</th>
+            </tr>
+            {% for diet in recommends %}
+            <tr>
+                <td>{{ diet['Recipe_name'] }}</td>
+                <td>{{ diet['Cuisine_type'] }}</td>
+                <td>{{ diet['Protein(g)'] }}</td>
+                <td>{{ diet['Carbs(g)'] }}</td>
+                <td>{{ diet['Fat(g)'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <h2 class="text-primary">Breakfast</h2>
+    <form method="POST" action="/searchITEM" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="barcode_breakfast" placeholder="Enter Barcode">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">Search Breakfast</button>
+            </div>
+        </div>
+    </form>
+
+    <form action="/Upload_Barcode" method="POST" enctype="multipart/form-data">
+        <h3 class="text-center mb-2">Upload Barcode </h3>
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="meal" value="breakfast">
+        <div class="form-group">
+            {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_breakfast"
+            ) }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+    {% if session.get('results_breakfast') %}
+    <h2>條形碼結果</h2>
+    <ul class="list-group">
+        {% for result in session.get('results_breakfast') %}
+        <li class="list-group-item">條形碼：{{ result.data }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% if session.get('products_breakfast') %}
+    <ul class="list-group mb-4">
+        {% for product in session.get('products_breakfast') %}
+        <li class="list-group-item">
+            <strong>{{ product['product_name'] }}</strong> - carbohydrates: {{ product['carbohydrates'] }}g, fat: {{
+            product['fat'] }}g, protein: {{ product['protein'] }}g
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2 class="text-success">Lunch</h2>
+    <form method="POST" action="/searchITEM" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="barcode_lunch" placeholder="Enter Barcode">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit">Search Lunch</button>
+            </div>
+        </div>
+    </form>
+    <form action="/Upload_Barcode" method="POST" enctype="multipart/form-data">
+        <h3 class="text-center mb-2">Upload Barcode </h3>
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="meal" value="lunch">
+        <div class="form-group">
+            {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_lunch"
+            ) }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+    {% if session.get('results_lunch') %}
+    <h2>條形碼結果</h2>
+    <ul class="list-group">
+        {% for result in session.get('results_lunch') %}
+        <li class="list-group-item">條形碼：{{ result.data }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if session.get('products_lunch') %}
+    <ul class="list-group mb-4">
+        {% for product in session.get('products_lunch') %}
+        <li class="list-group-item">
+            <strong>{{ product['product_name'] }}</strong> - carbohydrates: {{ product['carbohydrates'] }}g, fat: {{
+            product['fat'] }}g, protein: {{ product['protein'] }}g
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2 class="text-warning">Dinner</h2>
+    <form method="POST" action="/searchITEM" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="barcode_dinner" placeholder="Enter Barcode">
+            <div class="input-group-append">
+                <button class="btn btn-outline-warning" type="submit">Search Dinner</button>
+            </div>
+        </div>
+    </form>
+    <form action="/Upload_Barcode" method="POST" enctype="multipart/form-data">
+        <h3 class="text-center mb-2">Upload Barcode </h3>
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="meal" value="dinner">
+        <div class="form-group">
+            {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_dinner"
+            ) }}
+
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+
+    {% if session.get('results_dinner') %}
+    <h2>條形碼結果</h2>
+    <ul class="list-group">
+        {% for result in session.get('results_dinner') %}
+        <li class="list-group-item">條形碼：{{ result.data }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if session.get('products_dinner') %}
+    <ul class="list-group mb-4">
+        {% for product in session.get('products_dinner') %}
+        <li class="list-group-item">
+            <strong>{{ product['product_name'] }}</strong> - carbohydrates: {{ product['carbohydrates'] }}g, fat: {{
+            product['fat'] }}g, protein: {{ product['protein'] }}g
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2 class="text-danger">Total Information</h2>
+    <div class="totals mb-5">
+        {% if total_carbs %}
+        <div class="progress mb-3" style="height: 30px;">
+            <div class="progress-bar bg-info" role="progressbar" style="width: {{ total_carbs }}%;"
+                 aria-valuenow="{{ total_carbs }}" aria-valuemin="0" aria-valuemax="100">
+                carbohydrates: {{ total_carbs }} g
+            </div>
+        </div>
+        {% endif %}
+
+        {% if total_protein %}
+        <div class="progress mb-3" style="height: 30px;">
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{ total_protein }}%;"
+                 aria-valuenow="{{ total_protein }}" aria-valuemin="0" aria-valuemax="100">
+                protein: {{ total_protein }} g
+            </div>
+        </div>
+        {% endif %}
+
+        {% if total_fat %}
+        <div class="progress mb-3" style="height: 30px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ total_fat }}%;"
+                 aria-valuenow="{{ total_fat }}" aria-valuemin="0" aria-valuemax="100">
+                fat: {{ total_fat }} g
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+
+{% endblock %}

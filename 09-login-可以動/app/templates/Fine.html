@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <div>
+        {{form.student_id.label}}<br/>{{form.student_id(size = 30)}}<br/>
+        {% for error in form.student_id.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{form.device_id.label}}<br/>{{form.device_id(size = 30)}}<br/>
+        {% for error in form.device_id.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{form.submit() }}
+    </div>
+
+
+</form>
+{% if payment is not none %}
+欠多少錢{{payment}}
+欠的時間{{overdue_days}}
+{% endif %}
+
+{% endblock %}
