@@ -1,4 +1,5 @@
 import csv
+import json
 import math
 import os
 from uuid import uuid4
@@ -24,6 +25,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 from werkzeug.security import generate_password_hash, check_password_hash
 from authlib.integrations.flask_client import OAuth
+from app.llama3 import GroqChatClient
+
 import pandas as pd
 
 
@@ -183,6 +186,9 @@ def calculate_weight_change(tdee, days, initial_fat_mass, total_calories, gender
     new_weight = new_fat_mass + new_ffm
     return new_weight
 
+# 获取当前脚本所在目录
+current_dir = os.path.dirname(__file__)
+model_path = os.path.join(current_dir, "fine_tuned_model")
 
 @app.route('/DietJournal', methods=['GET', 'POST'])
 def diet_journal():
@@ -707,94 +713,25 @@ def nearby_gyms():
     return render_template('GoogleMaps.html', google_maps_api_key=google_maps_api_key)
 
 
-@app.route('/Camera_barcode', methods=['GET', 'POST'])
-def camera_barcode():
-    return render_template('camera_barcode.html')
+@app.route('/Directions', methods=['GET', 'POST'])
+def directions():
+    google_directions_api_key = "AIzaSyDAb5nxW_WUizlEfUrhgkiX92J5JnMCQuI"
+    return render_template('GoogleDirections.html')
 
-    # @app.route('/handle_barcode', methods=['GET', 'POST'])
-    # def handle_barcode():
-    #     data = request.get_json()
-    #     barcode = data['code']
-    #     print("Received barcode:", barcode)
-    #     # 在這裡處理條形碼，例如查詢數據庫
-    #     return jsonify({'message': 'Received barcode: ' + barcode})
+system_message = """you are an healthy assistant help people to make their life better.
+people who wants to lose weight give them some tips or people who wants to gain weight give them some tips. 
+people who wants to gain some healthy knowledge give them some advice.
+people who is struggling with not lose weight enough or gian weight enough give them some emotional support.
+""".strip().replace('\n', '')
 
-    # def gen_frames():
-    #     cap = cv2.VideoCapture(0)
-    #     while True:
-    #         success, frame = cap.read()
-    #         if not success:
-    #             break
-    #         else:
-    #             barcodes = pyzbar.decode(frame)
-    #             for barcode in barcodes:
-    #                 (x, y, w, h) = barcode.rect
-    #                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    #                 barcode_data = barcode.data.decode("utf-8")
-    #                 barcode_type = barcode.type
-    #                 text = f"{barcode_data} ({barcode_type})"
-    #                 cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-    #             ret, buffer = cv2.imencode('.jpg', frame)
-    #             frame = buffer.tobytes()
-    #             yield (b'--frame\r\n'
-    #                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-    #
-    #
-    # @app.route('/video_feed')
-    # def video_feed():
-    #     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    #
-    #
-    # @app.route('/video', methods=['GET', 'POST'])
-    # def video():
-    #     return render_template('video.html')
-    #
-    #
-    # @app.route('/handle_barcode', methods=['POST'])
-    # def handle_barcode():
-    #     data = request.json
-    #     print("Received barcode:", data.get('code'))
-    #     return jsonify(success=True, barcode=data.get('code'))
+client = GroqChatClient(model_id="llama3-8b-8192", system_message=system_message)
 
 
-# 获取当前脚本所在目录
-current_dir = os.path.dirname(__file__)
-model_path = os.path.join(current_dir, "fine_tuned_model")
-
-# 加载微调后的 GPT-2 模型和分词器
-if not os.path.exists(model_path):
-    raise EnvironmentError(f"Model path {model_path} does not exist")
-
-tokenizer = GPT2Tokenizer.from_pretrained(model_path)
-model = GPT2LMHeadModel.from_pretrained(model_path)
-
-
-def generate_response(prompt):
-    inputs = tokenizer.encode(prompt, return_tensors="pt")
-    outputs = model.generate(
-        inputs,
-        max_length=200,
-        num_return_sequences=1,
-        no_repeat_ngram_size=2,
-        do_sample=True,
-        top_k=50,
-        top_p=0.95,
-        temperature=0.7
-    )
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return response
-
-
-@app.route('/Generate')
-def Generate():
-    return render_template('Generate.html')
-
-
-@app.route('/get_answer', methods=['GET', 'POST'])
-def get_answer():
-    user_input = request.form['question']
-    response = generate_response(user_input)
-    return jsonify({'response': response})
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.json.get('message')
+    response = client.send_request(client.draft_message(user_input), stream=False)
+    return jsonify({'answer': response['content']})
 
 
 @app.errorhandler(413)

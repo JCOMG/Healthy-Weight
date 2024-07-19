@@ -71,41 +71,41 @@
         <h1>Hello!</h1><br>
         <!--    <h2>Before we start</h2>-->
         <!--    <h2>Something you need to know</h2>-->
-        <div class="info-section" style="border-left: 5px solid #2a6496;">
+        <div class="info-section" style="border-left: 0px solid #2a6496;">
             <p><strong class="highlight"
                        style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
                 is BMR?</strong><br>
                 <br><span style="font-size: 20px;">
-              基礎代謝率（BMR）是指在靜息狀態下，一個人在沒有進食且環境溫度適宜的情況下，維持生命活動所需的最低能量消耗。這包括維持呼吸、心跳、體溫和其他基本生理功能的能量需求。
-            舉例：
-            假設一位30歲的男性，體重70公斤，身高175公分，他的BMR可能約為1685千卡/日。這意味著即使他整天什麼也不做，身體也會消耗這些卡路里來維持基本生命活動。
+              Basal metabolic rate (BMR) refers to the minimum energy expenditure required by a person to maintain life activities in a resting state without eating and when the ambient temperature is suitable. This includes energy requirements to maintain breathing, heartbeat, body temperature, and other basic physiological functions.
+ Example:
+ Assuming a 30-year-old man weighs 70 kilograms and is 175 centimeters tall, his BMR may be about 1685 kcal/day. This means that even if he does nothing all day long, his body will consume these calories to maintain basic life activities.
         </span>
                 <br>
             </p>
             <p><strong class="highlight"
                        style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
                 is RMR?</strong><br><span style="font-size: 20px;">
-              休息代謝率（RMR）類似於基礎代謝率，但測量條件更為寬鬆，通常指的是在非睡眠、放鬆狀態下的代謝率。它比基礎代謝率略高，因為包括了輕微的活動如坐立、小動作等所需的能量。
-            舉例：
-            使用同樣的30歲男性，如果他大部分時間坐著，進行輕度活動，他的RMR可能約為1900千卡/日。這表示即使他不進行任何劇烈活動，他的身體在一天中也會消耗這些卡路里。
+             Resting metabolic rate (RMR) is similar to basal metabolic rate, but the measurement conditions are more relaxed and usually refers to the metabolic rate in a non-sleeping, relaxed state. It is slightly higher than the basal metabolic rate because it includes the energy required for light activities such as sitting, standing, small movements, etc.
+ Example:
+ Using the same 30-year-old male, if he sat most of the time and engaged in light activity, his RMR would probably be about 1900 kcal/day. This means that his body will burn these calories throughout the day even if he is not doing any strenuous activity.
                 </span>
             </p>
             <br>
         </div>
         <form method="POST" action="/show_Body_status">
             <button type="submit" name="Choose" class="btn btn-danger"
-                    onclick=" return confirm('u sure ?')" style="font-size: 20px;"> Want to calculate BMR or RMR ? Click
+                    onclick=" return confirm('Are you sure ?')" style="font-size: 20px;"> Want to calculate BMR or RMR ? Click
                 here
             </button>
 
         </form>
     </div>
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <h1>Barcode Scanner</h1>-->
-<!--    <form action="/video" method="post">-->
-<!--        <button type="submit">Start Scanning</button>-->
-<!--    </form>-->
+    <!--    <meta charset="UTF-8">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--    <h1>Barcode Scanner</h1>-->
+    <!--    <form action="/video" method="post">-->
+    <!--        <button type="submit">Start Scanning</button>-->
+    <!--    </form>-->
 
     <div class="AllSection">
         <div class="information-section" id="information-section">
@@ -173,7 +173,7 @@
                 <li><a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
                        onclick="toggleTDEEInfo()">※ What is TDEE?</a></li>
                 <div class="tdee-info" id="tdee-info">
-                    TDEE (Total Daily Energy Expenditure) 是指每天總能量消耗，包括基礎代謝率（BMR）和所有活動所消耗的能量。
+                    TDEE stands for total daily energy expenditure. It is the total energy that a person uses in a day.
                 </div>
                 <li>RECOMMEND CALORIE INTAKE :<span
                         style="color: #007bff; font-weight: bold; font-size: 25px;"> {{ nutrients['RECOMMEND CALORIE INTAKE'] }} </span>calorie
