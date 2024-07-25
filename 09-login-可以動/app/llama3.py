@@ -96,12 +96,84 @@ class GroqChatClient:
     def last_message(self):
         return self.messages[-1]
 
-    def fine_tune(self, intents):
-        # 這裡加入處理您的意圖數據集的邏輯
+    #     #class Chat: 沒有property的時候
+    #     def __init__(self):
+    #         self.messages = []
+    #
+    #     def add_message(self, message):
+    #         self.messages.append(message)
+    #
+    #     def get_last_message(self):
+    #         return self.messages[-1]
+    #
+    # # 使用範例
+    # chat = Chat()
+    # chat.add_message("Hello")
+    # chat.add_message("How are you?")
+
+    # 獲取最後一個訊息
+    # print(chat.get_last_message())  # 輸出: How are you?
+
+    # #     class Chat: 有property的時候
+
+#     class Chat:
+#     def __init__(self):
+#         self.messages = []
+#
+#     def add_message(self, message):
+#         self.messages.append(message)
+#
+#     @property
+#     def last_message(self):
+#         return self.messages[-1]
+#
+#
+# # 使用範例
+# chat = Chat()
+# chat.add_message("Hello")
+# chat.add_message("How are you?")
+#
+# # 獲取最後一個訊息
+# print(chat.last_message)  # 輸出: How are you?
+
+
+    def fine_tune(self, intents): # 微調 llama3 model
         for intent in intents:
             for pattern in intent["patterns"]:
                 self.messages.append(self.draft_message(pattern, 'user'))
                 self.messages.append(self.draft_message(intent["responses"][0], 'assistant'))
+                # 將每個intents的pattern作為用戶訊息，將相應的回應作為助手訊息，依次添加到 messages 列表中。
+# 假如 :
+#  intents = [
+#     {
+#         "patterns": ["Hello", "Hi", "Hey"],
+#         "responses": ["Hello! How can I help you today?"]
+#     },
+#     {
+#         "patterns": ["Bye", "Goodbye"],
+#         "responses": ["Goodbye! Have a great day!"]
+#     }
+# ]
+# client = GroqChatClient()
+#
+# client.fine_tune(intents)
+#
+# print(client.messages)
+
+# [
+#     {'role': 'user', 'content': 'Hello'},
+#     {'role': 'assistant', 'content': 'Hello! How can I help you today?'},
+#     {'role': 'user', 'content': 'Hi'},
+#     {'role': 'assistant', 'content': 'Hello! How can I help you today?'},
+#     {'role': 'user', 'content': 'Hey'},
+#     {'role': 'assistant', 'content': 'Hello! How can I help you today?'},
+#     {'role': 'user', 'content': 'Bye'},
+#     {'role': 'assistant', 'content': 'Goodbye! Have a great day!'},
+#     {'role': 'user', 'content': 'Goodbye'},
+#     {'role': 'assistant', 'content': 'Goodbye! Have a great day!'}
+# ]
+
+
 
 
 if __name__ == '__main__':
@@ -110,13 +182,15 @@ if __name__ == '__main__':
     people who wants to gain some healthy knowledge give them some advice.
     people who is struggling with not lose weight enough or gian weight enough give them some emotional support. 
     """.strip().replace('\n', '')
+    # strip().replace('\n', '') 方法用來移除字符串首尾的空白字符（包括空格和換行符）。
     client = GroqChatClient(model_id="llama3-8b-8192", system_message=system_message)
     stream_response = True
+    # 當 stream_response 設為 True 時，表示我們希望以串流的方式接收模型的回應，這意味著模型將會逐步返回回應，而不是等待整個回應生成完畢才返回。
 
     with open('intents.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    client.fine_tune(data['intents'])
+    client.fine_tune(data['intents']) # 進入方法 fine_tune去做微調
 
     while True:
         user_input = input("enter your message (or type 'exit','leave','stop',to end ): ")
@@ -124,10 +198,45 @@ if __name__ == '__main__':
             break
 
         response = client.send_request(client.draft_message(user_input), stream=stream_response)
+        # 假設 user_input 是 "I want to lose weight, can you help me?"，那麼 draft_message 方法會生成一個訊息字典，類似這樣：
+        # {
+        #     'role': 'user',
+        #     'content': 'I want to lose weight, can you help me?'
+        # }
+
+        # 然後使用 client.send_request() 方法發送請求給模型，並獲取回應。stream = stream_response 表示我們希望逐步接收回應內容。
 
         message = ''
-        for chunk in response:
+        for chunk in response: #這是一個循環，用來處理逐步接收的回應內容（假設 stream_response 為 True）。
             content_chunk = chunk.choices[0].delta.content
-            print(content_chunk, end="")
-            message += str(content_chunk)
+            # chunk 是每次迭代得到的一個回應塊。
+            # 每個 chunk 包含一個或多個選項（choices），這裡我們取第一個選項 choices[0]。
+            # delta 是這個選項中的增量更新部分。增量更新的意思是每個回應塊只包含新生成的一部分內容，而不是整個回應。
+            # content 是增量更新的具體內容，表示這個回應塊中新增的文字。
+            # 這樣做的原因是因為當模型以串流的方式返回回應時，它會逐塊生成內容。每個回應塊只包含新增加的部分，而不是完整的回應。
+
+            # ex :
+            # response = [
+            #     {"choices": [{"delta": {"content": "Hello"}}]},
+            #     {"choices": [{"delta": {"content": ", how"}}]},
+            #     {"choices": [{"delta": {"content": " are you"}}]},
+            #     {"choices": [{"delta": {"content": " doing?"}}]}
+            # ]
+            # 第一個回應塊:
+            # chunk = {"choices": [{"delta": {"content": "Hello"}}]}
+            # content_chunk = chunk.choices[0].delta.content  # "Hello"
+            # 第二個回應塊:
+            # chunk = {"choices": [{"delta": {"content": ", how"}}]}
+            # content_chunk = chunk.choices[0].delta.content  # ", how"
+            # 第三個回應塊:
+            # chunk = {"choices": [{"delta": {"content": " are you"}}]}
+            # content_chunk = chunk.choices[0].delta.content  # " are you"
+            # 第四個回應塊:
+            # chunk = {"choices": [{"delta": {"content": " doing?"}}]}
+            # content_chunk = chunk.choices[0].delta.content  # " doing?"
+
+            print(content_chunk, end="") # 將提取的內容即時打印出來。end="" 表示打印內容後不換行
+            message += str(content_chunk) # 將提取的內容追加到 message 字符串中，形成完整的回應。
         client.messages.append(client.draft_message(message, 'assistant'))
+        # client.messages：這是一個列表，用來存儲所有的對話訊息，包括使用者的訊息和模型的回應。
+        # 將生成的完整回應訊息（角色為 'assistant'）添加到 client.messages 列表中，這樣可以保留整個對話的上下文。

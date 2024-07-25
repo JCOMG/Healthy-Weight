@@ -94,7 +94,8 @@
         </div>
         <form method="POST" action="/show_Body_status">
             <button type="submit" name="Choose" class="btn btn-danger"
-                    onclick=" return confirm('Are you sure ?')" style="font-size: 20px;"> Want to calculate BMR or RMR ? Click
+                    onclick=" return confirm('Are you sure ?')" style="font-size: 20px;"> Want to calculate BMR or RMR ?
+                Click
                 here
             </button>
 
@@ -123,9 +124,14 @@
                 <option>female</option>
             </select><br>
 
-                Weight (kg): <input type="number" name="weight" placeholder="Weight (kg)" step="0.01"><br>
-                Height (cm): <input type="number" name="height" placeholder="Height (cm)" step="0.01"><br>
-                Age: <input type="number" name="age" placeholder="age ex:18"><br>
+                Weight (kg): <input type="number" name="weight" id="weight" placeholder="Weight (kg)" step="0.01"
+                                    oninput="calculateBMI()"><br>
+                Height (cm): <input type="number" name="height" id="height" placeholder="Height (cm)" step="0.01"
+                                    oninput="calculateBMI()"><br>
+                <!--            step="0.01"    使用者可以輸入和增加的數值精度到小數點後兩位。-->
+                <h2 id="bmiResult">BMI: </h2>
+                Age: <input type="number" name="age" placeholder="age ex:18" required><br>
+<!--                Age: <input type="number" name="age" placeholder="age ex:18"><br>-->
                 Activity Level: <select name="activity_level">
                 <option value="" selected>Please Choose</option>
                 <option value="1.2">Long Seat</option>
@@ -139,8 +145,8 @@
                 <option value="lose"> Lose weight</option>
                 <option value="maintain"> Maintain Weight</option>
             </select><br>
-                Desired time (AT LEAST 1 MONTH OR 31 DAYS): <input type="number" name="days"
-                                                                   placeholder="AT LEAST 1 MONTH OR 31 DAYS"><br>
+                Desired time Enter how many days (AT LEAST 31 DAYS): <input type="number" name="days"
+                                                                            placeholder="AT LEAST 31 DAYS"><br>
                 <a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
                    onclick="toggleTIMESInfo()">※ Why Desired time at least 1 month or more ?</a>
                 <div class="times-info" id="times-info">
@@ -202,8 +208,14 @@
                 <!--        千卡（kilocalorie, kcal）或大卡（Calorie, Cal）是一樣的但跟卡路里不同：-->
                 <!--        1千卡等於1000卡路里，即 1 kcal = 1000 cal(卡路里（calorie, cal）：)。 -->
             </ul>
-            <form method="POST" action="/DietJournal">
+            <form method="POST" action="/DietJournal" onsubmit="copyInputValues()">
                 <input type="hidden" name="fitness_goal" value="{{ fitness_goal }}">
+                <input type="hidden" name="BmrRmr" value="{{ BmrRmr }}">
+                <input type="hidden" name="gender" value="{{ gender }}">
+                <input type="hidden" name="age" value="{{ age }}">
+                <input type="hidden" name="weight" id="hidden_weight">
+                <input type="hidden" name="height" id="hidden_height">
+                <input type="hidden" name="activity_level" value="{{ activity_level }}">
                 <button type="submit" class="btn btn-primary mt-3">Want to make a plan ?</button>
             </form>
             {% endif %}
@@ -299,37 +311,53 @@
 </div>
 
 
-</div>
-</div>
 <script>
+    function calculateBMI() {
+        const weight = parseFloat(document.getElementById('weight').value);
+        const height = parseFloat(document.getElementById('height').value);
 
-    <!--有順序的，第一個畫面是toggleTIMESInfo再來是 tdee 再來是 recommend -->
-        function toggleTIMESInfo() {
-            var TIMESINFO = document.getElementById('times-info');
-            if (TIMESINFO.style.display === 'none' || TIMESINFO.style.display === '') {
-                TIMESINFO.style.display = 'block';
-            } else {
-                TIMESINFO.style.display = 'none';
-            }
+        if (!isNaN(weight) && !isNaN(height) && height > 0) {
+            const heightInMeters = height / 100;
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+            document.getElementById('bmiResult').innerText = `BMI: ${bmi}`;
+        } else {
+            document.getElementById('bmiResult').innerText = 'BMI: ';
         }
+    }
 
-        function toggleTDEEInfo() {
-            var tdeeInfo = document.getElementById('tdee-info');
-            if (tdeeInfo.style.display === 'none' || tdeeInfo.style.display === '') {
-                tdeeInfo.style.display = 'block';
-            } else {
-                tdeeInfo.style.display = 'none';
-            }
-        }
 
-        function toggleRECOMMEND() {
-            var RECOMMENDinfo = document.getElementById('RECOMMEND-info');
-            if (RECOMMENDinfo.style.display === 'none' || RECOMMENDinfo.style.display === '') {
-                RECOMMENDinfo.style.display = 'block';
-            } else {
-                RECOMMENDinfo.style.display = 'none';
-            }
-        }
+    function copyInputValues() {
+        document.getElementById('hidden_weight').value = document.getElementById('weight').value;
+        document.getElementById('hidden_height').value = document.getElementById('height').value;
+    }
+
+
+    function toggleTIMESInfo() {
+    var TIMESINFO = document.getElementById('times-info');
+    if (TIMESINFO.style.display === 'none' || TIMESINFO.style.display === '') {
+    TIMESINFO.style.display = 'block';
+    } else {
+    TIMESINFO.style.display = 'none';
+    }
+    }
+
+    function toggleTDEEInfo() {
+    var tdeeInfo = document.getElementById('tdee-info');
+    if (tdeeInfo.style.display === 'none' || tdeeInfo.style.display === '') {
+    tdeeInfo.style.display = 'block';
+    } else {
+    tdeeInfo.style.display = 'none';
+    }
+    }
+
+    function toggleRECOMMEND() {
+    var RECOMMENDinfo = document.getElementById('RECOMMEND-info');
+    if (RECOMMENDinfo.style.display === 'none' || RECOMMENDinfo.style.display === '') {
+    RECOMMENDinfo.style.display = 'block';
+    } else {
+    RECOMMENDinfo.style.display = 'none';
+    }
+    }
 </script>
 {% endblock %}
 

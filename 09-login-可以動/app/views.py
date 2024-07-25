@@ -54,23 +54,35 @@ def BMR():
         formula = request.form['BmrRmr']
         gender = request.form['gender']
         weight = float(request.form['weight'])
+        session['weight'] = weight
         height = float(request.form['height'])
+        session['height'] = height
         age = int(request.form['age'])
+        session['age'] = age
         activity_level = request.form['activity_level']
         # 儘管在 HTML 表單中您定義的選項值是數字（如 "1.2"），但當這些數據通過表單提交到後端時，它們仍然會被處理為字符串。
         days = request.form['days']
         fitness_goal = request.form['fitness_goal']
         print(fitness_goal)
+        session['fitness_goal'] = fitness_goal
+        session['BmrRmr'] = formula
+        session['gender'] = gender
+        session['weight'] = weight
+        session['height'] = height
+        session['age'] = age
+        session['activity_level'] = activity_level
+        session['days'] = days
         nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal)
         # 假設初步的脂肪質量和無脂肪質量，這些值通常需要更精確的測量或估計
         initial_fat_mass = weight * 0.25  # 脂肪
         # initial_ffm = weight * 0.75  # 無脂肪是肌肉跟、骨骼、水分、器官等。
-
-        # 使用這個函數來計算預測的體重變化
         new_weight = calculate_weight_change(nutrients['tdee'], days, initial_fat_mass,
                                              nutrients['calories'], gender, weight, height, age)
+
+    # 使用這個函數來計算預測的體重變化
+
     return render_template('index.html', nutrients=nutrients, days=days, new_weight=new_weight,
-                           fitness_goal=fitness_goal)
+                           )
 
 
 def calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal):
@@ -186,23 +198,132 @@ def calculate_weight_change(tdee, days, initial_fat_mass, total_calories, gender
     new_weight = new_fat_mass + new_ffm
     return new_weight
 
+
 # 获取当前脚本所在目录
 current_dir = os.path.dirname(__file__)
 model_path = os.path.join(current_dir, "fine_tuned_model")
 
+
 @app.route('/DietJournal', methods=['GET', 'POST'])
 def diet_journal():
-    hidden_fitness_goal = request.form.get("fitness_goal")
-    dataset_diet = os.path.join(current_dir, "All_Diets.csv")
+    hidden_fitness_goal = session.get("fitness_goal")
+    formula = session.get('BmrRmr')
+    gender = session.get('gender')
+    weight = session.get('weight')
+    height = session.get('height')
+    age = session.get('age')
+    activity_level = session.get('activity_level')
+
+    nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, hidden_fitness_goal)
+
+    carbs = nutrients['carbs']
+    protein = nutrients['protein']
+    fat = nutrients['fat']
+
+    dataset_diet = os.path.join(current_dir, "epi_r.csv")
     data_diet = pd.read_csv(dataset_diet, encoding='unicode_escape')
-    # print(data_diet.head())
     form = UploadPicturesForm()
     recommends = pd.DataFrame()
-    if hidden_fitness_goal == 'lose':
-        recommends = data_diet[data_diet['Diet_type'] == 'paleo']
-    return render_template('Diet Journal.html', form=form, hidden_fitness_goal=hidden_fitness_goal,
-                           recommends=recommends.to_dict(orient='records'))
+    # 将 'calories'、'protein' 和 'fat' 列转换为数值类型
 
+    data_diet['calories'] = pd.to_numeric(data_diet['calories'], errors='coerce')
+    data_diet['protein'] = pd.to_numeric(data_diet['protein'], errors='coerce')
+    data_diet['fat'] = pd.to_numeric(data_diet['fat'], errors='coerce')
+    # 计算每个食品的碳水化合物含量（carbs）
+    data_diet['carbs'] = data_diet['calories'] - data_diet['protein'] * 4 - data_diet['fat'] * 9
+    print(data_diet)
+    if hidden_fitness_goal == 'lose':
+        selected_foods = data_diet[
+            (data_diet['carbs'] <= carbs) & (data_diet['protein'] <= protein) & (data_diet['fat'] <= fat)]
+        recommends = selected_foods.sample(n=5)  # 透過 pandas 的隨機篩選 5 個資料回去
+        print(recommends)
+        recommends_recipe = recommends[['title', 'calories', 'protein', 'fat', 'carbs']]
+        recommends_dict = recommends_recipe.to_dict(orient='records')
+        if 'recommends_dict' not in session:
+            session['recommends'] = recommends_dict
+
+    return render_template('Diet Journal.html', form=form, hidden_fitness_goal=hidden_fitness_goal,
+                           recommends=session['recommends'])
+
+
+@app.route('/delete_product', methods=['POST'])
+def delete_product():
+    product_index = request.form.get('product_BreakfastIndex')
+    product_index1 = request.form.get('product_LunchIndex')
+    product_index2 = request.form.get('product_DinnerIndex')
+    print(product_index)
+    if product_index is not None:
+        product_index = int(product_index)  # 將索引轉換為整數
+        products_breakfast = session.get('products_breakfast', [])
+        print(products_breakfast)  # 0
+        # session.get('products_breakfast', [])  從 session 中獲取名為 products_breakfast 的產品列表。如果
+        # session 中沒有這個鍵，它會返回一個空的列表[]。
+        print(
+            len(products_breakfast))  # [{'carbohydrates': 9.5, 'fat': 0.5, 'product_name': 'Strawberry Banana Smoothie', 'protein': 0.5}]
+        # list 中只有 1 個資料
+        if 0 <= product_index < len(products_breakfast):
+            products_breakfast.pop(product_index)
+            session[
+                'products_breakfast'] = products_breakfast  # # 例如，在這個例子中，用戶刪除了早餐產品列表中的一項產品，我們需要將這個變更保存到會話中，以便在後續的請求中反映最新的列表狀態。
+
+            # ex :
+            # session = {
+            #     'products_breakfast': [
+            #         {'product_name': 'Eggs', 'carbohydrates': 1, 'fat': 5, 'protein': 6},
+            #         {'product_name': 'Bacon', 'carbohydrates': 0, 'fat': 42, 'protein': 37},
+            #         {'product_name': 'Toast', 'carbohydrates': 12, 'fat': 2, 'protein': 3}
+            #     ]
+            # }
+
+        # products_breakfast.pop(1)  index = 1  刪除 也就是第 1 行的要刪除
+
+        # products_breakfast = [
+        #     {'product_name': 'Eggs', 'carbohydrates': 1, 'fat': 5, 'protein': 6},
+        #     {'product_name': 'Toast', 'carbohydrates': 12, 'fat': 2, 'protein': 3}
+        # ]
+
+        # 更新會話數據：
+        # session['products_breakfast'] = products_breakfast
+    if product_index1 is not None:
+        product_index1 = int(product_index1)  # 將索引轉換為整數
+        products_lunch = session.get('products_lunch', [])
+        # session.get('products_breakfast', [])  從 session 中獲取名為 products_breakfast 的產品列表。如果
+        # session 中沒有這個鍵，它會返回一個空的列表[]。
+        print(
+            len(products_lunch))  # [{'carbohydrates': 9.5, 'fat': 0.5, 'product_name': 'Strawberry Banana Smoothie', 'protein': 0.5}]
+        # list 中只有 1 個資料
+        if 0 <= product_index1 < len(products_lunch):
+            products_lunch.pop(product_index1)
+            session[
+                'products_lunch'] = products_lunch  # # 例如，在這個例子中，用戶刪除了早餐產品列表中的一項產品，我們需要將這個變更保存到會話中，以便在後續的請求中反映最新的列表狀態。
+
+    if product_index2 is not None:
+        product_index2 = int(product_index2)  # 將索引轉換為整數
+        products_dinner = session.get('products_dinner', [])
+        # session.get('products_breakfast', [])  從 session 中獲取名為 products_breakfast 的產品列表。如果
+        # session 中沒有這個鍵，它會返回一個空的列表[]。
+        print(
+            len(products_dinner))  # [{'carbohydrates': 9.5, 'fat': 0.5, 'product_name': 'Strawberry Banana Smoothie', 'protein': 0.5}]
+        # list 中只有 1 個資料
+        if 0 <= product_index2 < len(products_dinner):
+            products_dinner.pop(product_index2)
+            session[
+                'products_dinner'] = products_dinner  # # 例如，在這個例子中，用戶刪除了早餐產品列表中的一項產品，我們需要將這個變更保存到會話中，以便在後續的請求中反映最新的列表狀態。
+
+    update_totals()
+
+    return redirect(url_for('diet_journal'))
+
+def update_totals():
+    total_carbs = total_protein = total_fat = 0
+    for meal in ['products_breakfast', 'products_lunch', 'products_dinner']:
+        for product in session.get(meal, []):
+            total_carbs += product.get('carbohydrates', 0)
+            total_protein += product.get('protein', 0)
+            total_fat += product.get('fat', 0)
+    session['total_carbs'] = total_carbs
+    session['total_protein'] = total_protein
+    session['total_fat'] = total_fat
 
 @app.route('/Upload_Barcode', methods=['GET', 'POST'])
 def upload_barcode():
@@ -485,6 +606,7 @@ def get_food_data():
             else:
                 session['products_dinner'] = new_products_dinner
 
+        update_totals()
         # 重新計算總碳水化合物、總脂肪和總蛋白質
         total_carbs = 0
         total_fat = 0
@@ -712,11 +834,6 @@ def nearby_gyms():
     google_maps_api_key = "AIzaSyDAb5nxW_WUizlEfUrhgkiX92J5JnMCQuI"  # Google API金鑰
     return render_template('GoogleMaps.html', google_maps_api_key=google_maps_api_key)
 
-
-@app.route('/Directions', methods=['GET', 'POST'])
-def directions():
-    google_directions_api_key = "AIzaSyDAb5nxW_WUizlEfUrhgkiX92J5JnMCQuI"
-    return render_template('GoogleDirections.html')
 
 system_message = """you are an healthy assistant help people to make their life better.
 people who wants to lose weight give them some tips or people who wants to gain weight give them some tips. 
