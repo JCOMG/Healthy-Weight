@@ -50,6 +50,9 @@
                     <!--                    <li class="nav-item">-->
                     <!--                        <a class="nav-link" href="{{ url_for('barcode_scan') }}">Barcode</a>-->
                     <!--                    </li>-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('history') }}">History</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav right-buttons">
                     {% if current_user.is_anonymous %}
@@ -125,7 +128,7 @@
 <div class="chatbot-popup" id="chatbot-popup" style="display: none;">
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-input">
-        <input type="text" id="user-input" placeholder="Type a message...">
+        <input type="text" id="user-input" placeholder="Type any message EX:health tips oe emotional support">
         <button id="send-btn">Send</button>
     </div>
 </div>
@@ -141,11 +144,21 @@
                 }
             });
 
+<!--            toggleChatbot函數用於切換聊天機器人彈出視窗的顯示狀態。如果目前隱藏（display: none），則顯示（display: block）；如果目前顯示，則隱藏。-->
             function toggleChatbot() {
-                const chatbotPopup = document.getElementById('chatbot-popup');
-                chatbotPopup.style.display = chatbotPopup.style.display === 'none' ? 'block' : 'none';
+            const chatbotPopup = document.getElementById('chatbot-popup');
+            if (chatbotPopup.classList.contains('show')) {
+                chatbotPopup.classList.remove('show');
+                setTimeout(() => {
+                    chatbotPopup.style.display = 'none';
+                }, 500);
+            } else {
+                chatbotPopup.style.display = 'block';
+                setTimeout(() => {
+                    chatbotPopup.classList.add('show');
+                }, 10);
             }
-
+        }
             function sendMessage() {
                 const userInput = document.getElementById('user-input').value.trim();
                 if (userInput !== '') {

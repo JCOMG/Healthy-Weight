@@ -418,15 +418,23 @@ ul {
     background-color: #0074CC;
 }
 .chatbot-popup {
-    display: none;
-    position: fixed;
-    bottom: 190px;
-    right: 20px;
-    background-color: #fff;
-    border-radius: 15px;
-    width: 350px;
-    max-width: 90%;
-}
+            display: none;
+            position: fixed;
+            bottom: 190px;
+            right: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            width: 350px;
+            max-width: 90%;
+            opacity: 0;
+            transition: opacity 0.5s ease; /* 添加浮現效果 */
+        }
+
+.chatbot-popup.show {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.5s ease; /*  添加浮現效果*/
+        }
 .chat-header {
     background-color: #1087FF;
     color: #fff;

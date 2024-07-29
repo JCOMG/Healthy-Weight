@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -77,3 +79,18 @@ class Loan(db.Model):
         return f"loan(loan_id='{self.loan_id}', device_id='{self.device_id}', borrowdatetime='{self.borrowdatetime}' , returndatetime='{self.returndatetime}', '{self.student}')"
 
 
+class FoodLog(db.Model):
+    __tablename__ = 'food_logs'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    meal_type = db.Column(db.String(50), nullable=False)
+    food_name = db.Column(db.String(150), nullable=False)
+    carbohydrates = db.Column(db.Float, nullable=False)
+    protein = db.Column(db.Float, nullable=False)
+    fat = db.Column(db.Float, nullable=False)
+    total_carbs = db.Column(db.Float, nullable=True)
+    total_protein = db.Column(db.Float, nullable=True)
+    total_fat = db.Column(db.Float, nullable=True)
+
+    user = db.relationship('User', backref=db.backref('food_logs', lazy=True))

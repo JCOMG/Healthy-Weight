@@ -2,6 +2,7 @@ import csv
 import json
 import math
 import os
+from datetime import datetime
 from uuid import uuid4
 from PIL import Image
 from pyzbar.pyzbar import decode
@@ -20,7 +21,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, \
     UploadStudentsForm, ToggleActiveForm, UploadUsersForm, DamageForm, SearchStudentForm, UploadPicturesForm, \
     UpdateForm, AccountStatusForm, ListUsersForm, ForgotForm, Fine
-from app.models import Student, Loan, User
+from app.models import Student, Loan, User, FoodLog
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -229,7 +230,7 @@ def diet_journal():
     data_diet['calories'] = pd.to_numeric(data_diet['calories'], errors='coerce')
     data_diet['protein'] = pd.to_numeric(data_diet['protein'], errors='coerce')
     data_diet['fat'] = pd.to_numeric(data_diet['fat'], errors='coerce')
-    # 计算每个食品的碳水化合物含量（carbs）
+    # Calculate carbs
     data_diet['carbs'] = data_diet['calories'] - data_diet['protein'] * 4 - data_diet['fat'] * 9
     print(data_diet)
     if hidden_fitness_goal == 'lose':
@@ -242,8 +243,20 @@ def diet_journal():
         if 'recommends_dict' not in session:
             session['recommends'] = recommends_dict
 
+    elif hidden_fitness_goal == 'gain':
+        selected_foods = data_diet[
+            (data_diet['carbs'] >= carbs) & (data_diet['protein'] >= protein) & (data_diet['fat'] >= fat)]
+        recommends = selected_foods.sample(n=5)  # 透過 pandas 的隨機篩選 5 個資料回去
+        print(recommends)
+        recommends_recipe = recommends[['title', 'calories', 'protein', 'fat', 'carbs']]
+        recommends_dict = recommends_recipe.to_dict(orient='records')
+        if 'recommends_dict' not in session:
+            session['recommends'] = recommends_dict
+
     return render_template('Diet Journal.html', form=form, hidden_fitness_goal=hidden_fitness_goal,
-                           recommends=session['recommends'])
+                           recommends=session['recommends'], total_carbs=session.get('total_carbs', 0),
+                           total_protein=session.get('total_protein', 0),
+                           total_fat=session.get('total_fat', 0))
 
 
 @app.route('/delete_product', methods=['POST'])
@@ -314,6 +327,7 @@ def delete_product():
 
     return redirect(url_for('diet_journal'))
 
+
 def update_totals():
     total_carbs = total_protein = total_fat = 0
     for meal in ['products_breakfast', 'products_lunch', 'products_dinner']:
@@ -324,6 +338,83 @@ def update_totals():
     session['total_carbs'] = total_carbs
     session['total_protein'] = total_protein
     session['total_fat'] = total_fat
+
+
+@app.route('/save_food_log', methods=['POST'])
+def save_food_log():
+    user = current_user
+    if not user:
+        user = User.query.filter_by(username=session['username']).first()
+
+    today = datetime.today().date()
+
+    try:
+        # save breakfast data
+        for product in session.get('products_breakfast', []):
+            food_log = FoodLog(user_id=user.user_id, date=today, meal_type='breakfast',
+                               food_name=product['product_name'], carbohydrates=product['carbohydrates'],
+                               protein=product['protein'], fat=product['fat'],
+                               total_carbs=session.get('total_carbs', 0),
+                               total_protein=session.get('total_protein', 0),
+                               total_fat=session.get('total_fat', 0))
+            db.session.add(food_log)
+
+        # save lunch data
+        for product in session.get('products_lunch', []):
+            food_log = FoodLog(user_id=user.user_id, date=today, meal_type='lunch',
+                               food_name=product['product_name'], carbohydrates=product['carbohydrates'],
+                               protein=product['protein'], fat=product['fat'],
+                               total_carbs=session.get('total_carbs', 0),
+                               total_protein=session.get('total_protein', 0),
+                               total_fat=session.get('total_fat', 0))
+            db.session.add(food_log)
+
+        # save dinner data
+        for product in session.get('products_dinner', []):
+            food_log = FoodLog(user_id=user.user_id, date=today, meal_type='dinner',
+                               food_name=product['product_name'], carbohydrates=product['carbohydrates'],
+                               protein=product['protein'], fat=product['fat'],
+                               total_carbs=session.get('total_carbs', 0),
+                               total_protein=session.get('total_protein', 0),
+                               total_fat=session.get('total_fat', 0))
+            db.session.add(food_log)
+
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error saving food log: {e}")
+        return redirect(url_for('diet_journal'))
+
+    return redirect(url_for('history'))
+
+
+@app.route('/History', methods=['GET', 'POST'])
+def history():
+    user = current_user
+    print(user)
+    if not user:
+        user = User.query.filter_by(username=session['username']).first()
+    print(user)
+    # user_food_history = FoodLog.query.filter_by(user_id=user.user_id).all()
+    user_food_history = FoodLog.query.filter_by(user_id=user.user_id).all()
+    # 假設 FoodLog 有 date 和 food_item 欄位
+    food_history_details = []
+    for entry in user_food_history:
+        food_history_details.append({
+            'user_id': entry.user_id,
+            'date': entry.date,
+            'meal_type': entry.meal_type,
+            'food_name': entry.food_name,
+            'carbohydrates': entry.carbohydrates,
+            'protein': entry.protein,
+            'fat': entry.fat,
+        })
+
+    # 這裡假設你要在終端機上顯示這些資料
+    # for detail in food_history_details:
+    #     print(f"日期: {detail['date']}, 食物name: {detail['food_name']}")
+
+    return render_template("FoodHistory.html",food_history_details=food_history_details)
 
 @app.route('/Upload_Barcode', methods=['GET', 'POST'])
 def upload_barcode():
@@ -606,7 +697,7 @@ def get_food_data():
             else:
                 session['products_dinner'] = new_products_dinner
 
-        update_totals()
+        # update_totals()
         # 重新計算總碳水化合物、總脂肪和總蛋白質
         total_carbs = 0
         total_fat = 0
@@ -617,7 +708,7 @@ def get_food_data():
         for carbon_lunch in session.get("products_lunch", []):
             total_carbs += carbon_lunch.get("carbohydrates", 0)
         for carbon_dinner in session.get("products_dinner", []):
-            total_carbs += carbon_dinner.get("carbon_dinner", 0)
+            total_carbs += carbon_dinner.get("carbohydrates", 0)
         session["total_carbs"] = total_carbs
         # EXAMPLE
 
@@ -660,7 +751,7 @@ def get_food_data():
         for protein_lunch in session.get("products_lunch", []):
             total_protein += protein_lunch.get("protein", 0)
         for protein_dinner in session.get("products_dinner", []):
-            total_protein += protein_dinner.get("protein")
+            total_protein += protein_dinner.get("protein", 0)
         session["total_protein"] = total_protein
 
         for fat_breakfast in session.get("products_breakfast", []):
@@ -676,7 +767,8 @@ def get_food_data():
                                products_dinner=products_dinner,
                                total_carbs=total_carbs,
                                total_protein=total_protein,
-                               total_fat=total_fat, form=form)
+                               total_fat=total_fat, form=form, recommends=session.get('recommends', []),
+                               )
 
 
 def search_food(barcode):
@@ -719,63 +811,118 @@ def search_food(barcode):
     return []
 
 
+# @app.route('/Choose', methods=['GET', 'POST'])
+# def choose():
+#     if request.method == 'POST':
+#         index_Breakfast = None
+#         index_Lunch = None
+#         index_Dinner = None
+#         product_name_Breakfast = None
+#         product_name_Lunch = None
+#         product_name_Dinner = None
+#         print(123)
+#         if request.form.get("Choose"):
+#             index_Breakfast = request.form.get("Choose")  # 從表單獲取搜索關鍵字
+#             print(index_Breakfast)
+#             product_name_Breakfast = request.form.get(f"product_name_{index_Breakfast}")
+#             print(product_name_Breakfast)
+#         elif request.form.get("barcode_Lunch"):  # 從表單獲取搜索關鍵字
+#             index_Lunch = request.form.get("barcode_Lunch")  # 從表單獲取搜索關鍵字
+#             product_name_Lunch = request.form.get(f"product_name_{index_Lunch}")
+#         else:
+#             index_Dinner = request.form.get("barcode_Dinner")  # 從表單獲取搜索關鍵字
+#             product_name_Dinner = request.form.get(f"product_name_{index_Dinner}")
+#
+#         carbohydrates_Breakfast = float(request.form.get(f"carbohydrates_{index_Breakfast}", 0))
+#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
+#         fat_Breakfast = float(request.form.get(f"fat_{index_Breakfast}", 0))
+#         protein_Breakfast = float(request.form.get(f"protein_{index_Breakfast}", 0))
+#
+#         carbohydrates_Lunch = float(request.form.get(f"carbohydrates_{index_Lunch}", 0))
+#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
+#         fat_Lunch = float(request.form.get(f"fat_{index_Lunch}", 0))
+#         protein_Lunch = float(request.form.get(f"protein_{index_Lunch}", 0))
+#
+#         carbohydrates_Dinner = float(request.form.get(f"carbohydrates_{index_Dinner}", 0))
+#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
+#         fat_Dinner = float(request.form.get(f"fat_{index_Dinner}", 0))
+#         protein_Dinner = float(request.form.get(f"protein_{index_Dinner}", 0))
+#
+#         # 累加值到 session
+#
+#         session['total_carbs'] = session.get('total_carbs',
+#                                              0) + carbohydrates_Breakfast + carbohydrates_Lunch + carbohydrates_Dinner
+#         # session.get('total_carbs', 0) 是一個用於從 session 中取出名為 total_carbs的值的方法。
+#         # 如果 session 中存在  total_carbs 這個鍵，則會返回其對應的值。如果不存在，則默認返回0。
+#         # 當從表單獲取到的新 carbohydrates 值讀取後，程式將這個新值加到先前的 total_carbs 上（如果之前沒有設定，則從0開始加）。
+#         session['total_fat'] = session.get('total_fat', 0) + fat_Breakfast + fat_Lunch + fat_Dinner
+#         session['total_protein'] = session.get('total_protein', 0) + protein_Breakfast + protein_Lunch + protein_Dinner
+#
+#         # 儲存當前產品名稱，或者可以改為儲存所有產品的列表
+#         if product_name_Breakfast:
+#             session['last_product'] = product_name_Breakfast
+#         elif product_name_Lunch:
+#             session['last_product'] = product_name_Lunch
+#         else:
+#             session['last_product'] = product_name_Dinner
+#
+#     return render_template('Diet Journal.html', product_name_Breakfast=product_name_Breakfast,
+#                            carbohydrates_Breakfast=carbohydrates_Breakfast, fat_Breakfast=fat_Breakfast,
+#                            protein_Breakfast=protein_Breakfast,
+#                            product_name_Lunch=product_name_Lunch,
+#                            carbohydrates_Lunch=carbohydrates_Lunch,
+#                            fat_Lunch=fat_Lunch,
+#                            protein_Lunch=protein_Lunch,
+#                            product_name_Dinner=product_name_Dinner,
+#                            carbohydrates_Dinner=carbohydrates_Dinner,
+#                            fat_Dinner=fat_Dinner,
+#                            protein_Dinner=protein_Dinner,
+#                            total_carbs=session.get('total_carbs', 0),
+#                            total_fat=session.get('total_fat', 0),
+#                            total_protein=session.get('total_protein', 0))
+
+
 @app.route('/Choose', methods=['GET', 'POST'])
 def choose():
     if request.method == 'POST':
-        index_Breakfast = None
-        index_Lunch = None
-        index_Dinner = None
-        product_name_Breakfast = None
-        product_name_Lunch = None
-        product_name_Dinner = None
-        print(123)
-        if request.form.get("Choose"):
-            index_Breakfast = request.form.get("Choose")  # 從表單獲取搜索關鍵字
-            print(index_Breakfast)
-            product_name_Breakfast = request.form.get(f"product_name_{index_Breakfast}")
-            print(product_name_Breakfast)
-        elif request.form.get("barcode_Lunch"):  # 從表單獲取搜索關鍵字
-            index_Lunch = request.form.get("barcode_Lunch")  # 從表單獲取搜索關鍵字
-            product_name_Lunch = request.form.get(f"product_name_{index_Lunch}")
-        else:
-            index_Dinner = request.form.get("barcode_Dinner")  # 從表單獲取搜索關鍵字
-            product_name_Dinner = request.form.get(f"product_name_{index_Dinner}")
+        index_Breakfast = request.form.get("Choose")
+        index_Lunch = request.form.get("barcode_Lunch")
+        index_Dinner = request.form.get("barcode_Dinner")
+
+        product_name_Breakfast = request.form.get(f"product_name_{index_Breakfast}")
+        product_name_Lunch = request.form.get(f"product_name_{index_Lunch}")
+        product_name_Dinner = request.form.get(f"product_name_{index_Dinner}")
 
         carbohydrates_Breakfast = float(request.form.get(f"carbohydrates_{index_Breakfast}", 0))
-        # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
         fat_Breakfast = float(request.form.get(f"fat_{index_Breakfast}", 0))
         protein_Breakfast = float(request.form.get(f"protein_{index_Breakfast}", 0))
 
         carbohydrates_Lunch = float(request.form.get(f"carbohydrates_{index_Lunch}", 0))
-        # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
         fat_Lunch = float(request.form.get(f"fat_{index_Lunch}", 0))
         protein_Lunch = float(request.form.get(f"protein_{index_Lunch}", 0))
 
         carbohydrates_Dinner = float(request.form.get(f"carbohydrates_{index_Dinner}", 0))
-        # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
         fat_Dinner = float(request.form.get(f"fat_{index_Dinner}", 0))
         protein_Dinner = float(request.form.get(f"protein_{index_Dinner}", 0))
 
         # 累加值到 session
-
         session['total_carbs'] = session.get('total_carbs',
                                              0) + carbohydrates_Breakfast + carbohydrates_Lunch + carbohydrates_Dinner
-        # session.get('total_carbs', 0) 是一個用於從 session 中取出名為 total_carbs的值的方法。
-        # 如果 session 中存在  total_carbs 這個鍵，則會返回其對應的值。如果不存在，則默認返回0。
-        # 當從表單獲取到的新 carbohydrates 值讀取後，程式將這個新值加到先前的 total_carbs 上（如果之前沒有設定，則從0開始加）。
         session['total_fat'] = session.get('total_fat', 0) + fat_Breakfast + fat_Lunch + fat_Dinner
         session['total_protein'] = session.get('total_protein', 0) + protein_Breakfast + protein_Lunch + protein_Dinner
 
-        # 儲存當前產品名稱，或者可以改為儲存所有產品的列表
+        # 儲存當前產品名稱
         if product_name_Breakfast:
             session['last_product'] = product_name_Breakfast
         elif product_name_Lunch:
             session['last_product'] = product_name_Lunch
-        else:
+        elif product_name_Dinner:
             session['last_product'] = product_name_Dinner
 
-    return render_template('Diet Journal.html', product_name_Breakfast=product_name_Breakfast,
-                           carbohydrates_Breakfast=carbohydrates_Breakfast, fat_Breakfast=fat_Breakfast,
+    return render_template('Diet Journal.html',
+                           product_name_Breakfast=product_name_Breakfast,
+                           carbohydrates_Breakfast=carbohydrates_Breakfast,
+                           fat_Breakfast=fat_Breakfast,
                            protein_Breakfast=protein_Breakfast,
                            product_name_Lunch=product_name_Lunch,
                            carbohydrates_Lunch=carbohydrates_Lunch,

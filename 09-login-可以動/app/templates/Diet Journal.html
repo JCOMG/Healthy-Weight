@@ -197,17 +197,32 @@
             visibility: visible;
             opacity: 1;
         }
+
+        .save-food-log-form {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.save-food-log-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.save-food-log-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
-        function copyToClipboard(text) {
-                    navigator.clipboard.writeText(text).then(function() {
-                        console.log('Copied to clipboard successfully!');
-                    }, function(err) {
-                        console.error('Could not copy text: ', err);
-                    });
-                }
-
     </script>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Nutrition Plan</h1>
@@ -257,10 +272,10 @@
         </form>
 
         {% if session.get('results_breakfast') %}
-        <h2>條形碼結果</h2>
+        <h2>Barcode Results</h2>
         <ul class="list-group">
             {% for result in session.get('results_breakfast') %}
-            <li class="list-group-item">條形碼：{{ result.data }}</li>
+            <li class="list-group-item">Barcode：{{ result.data }}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -307,10 +322,10 @@
         </form>
 
         {% if session.get('results_lunch') %}
-        <h2>條形碼結果</h2>
+        <h2>Barcode Results</h2>
         <ul class="list-group">
             {% for result in session.get('results_lunch') %}
-            <li class="list-group-item">條形碼：{{ result.data }}</li>
+            <li class="list-group-item">barcode：{{ result.data }}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -357,12 +372,11 @@
 
 
         {% if session.get('results_dinner') %}
-        <h2>條形碼結果</h2>
+        <h2>Barcode Results</h2>
         <ul class="list-group">
             {% for result in session.get('results_dinner') %}
-            <li class="list-group-item" onclick="copyToClipboard('{{ result.data }}')">條形碼：{{ result.data }}
+            <li class="list-group-item">barcode：{{ result.data }}
 
-                <span class="tooltiptext">Click to copy</span>
             </li>
             {% endfor %}
         </ul>
@@ -416,6 +430,10 @@
         </div>
 
     </div>
-</header>
 
+    <form method="POST" action="/save_food_log" class="save-food-log-form">
+        <button type="submit" class="btn btn-primary">Save Today's Food Log</button>
+    </form>
+
+</header>
 {% endblock %}
