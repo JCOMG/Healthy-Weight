@@ -114,7 +114,8 @@
             <form method="POST" action="/Calculate_BMR" class="form-group">
                 Choose Formula : <select name="BmrRmr">
                 <option value="" selected>Please Choose</option>
-                <option>BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984</option>
+                <option>BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984)</option>
+                <option>BMR formula :Mifflin-St. Jeor  in 1990</option>
                 <option>RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)</option>
             </select><br>
 
@@ -131,7 +132,7 @@
                 <!--            step="0.01"    使用者可以輸入和增加的數值精度到小數點後兩位。-->
                 <h2 id="bmiResult">BMI: </h2>
                 Age: <input type="number" name="age" placeholder="age ex:18" required><br>
-<!--                Age: <input type="number" name="age" placeholder="age ex:18"><br>-->
+                <!--                Age: <input type="number" name="age" placeholder="age ex:18"><br>-->
                 Activity Level: <select name="activity_level">
                 <option value="" selected>Please Choose</option>
                 <option value="1.2">Long Seat</option>
@@ -184,10 +185,18 @@
                 <li>RECOMMEND CALORIE INTAKE :<span
                         style="color: #007bff; font-weight: bold; font-size: 25px;"> {{ nutrients['RECOMMEND CALORIE INTAKE'] }} </span>calorie
                 </li>
-                <li><a href="javascript:void(0);" onclick="toggleRECOMMEND()">Why RECOMMEND CALORIE INTAKE </a>
+                <li><a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
+                       onclick="toggleRECOMMEND()">※ Why RECOMMEND CALORIE INTAKE </a>
                 </li>
                 <div class="RECOMMEND-info" id="RECOMMEND-info">
-                    There is something we call energy
+                    Recommending calorie intake is crucial for managing weight effectively because it provides a
+                    structured approach to achieving specific health goals. For instance, individuals aiming to lose
+                    weight may have a typical daily intake of 2000 calories, but a recommended intake of 1700 calories
+                    creates a caloric deficit, which helps in weight loss. Conversely, those looking to gain weight
+                    might have a normal intake of 2000 calories, but increasing their intake to 2300 calories ensures a
+                    caloric surplus, promoting weight gain. By adjusting the recommended calorie intake based on
+                    individual goals, we can create personalized plans that facilitate healthy and sustainable weight
+                    management.
                 </div>
                 <li>carbohydrate: <span
                         style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['carbs'] }}</span> g
@@ -257,15 +266,6 @@
             </div>
         </div>
 
-
-        <!--            <div class="cardio">Running-->
-        <!--                <img src="/static/profile_pics/cardio1.jpg" alt="Lose weight illustration"-->
-        <!--                     style="width:40%; height:auto;">-->
-        <!--            </div>-->
-        <!--            <div class="cardio">Running-->
-        <!--                <img src="/static/profile_pics/cardio1.jpg" alt="Lose weight illustration"-->
-        <!--                     style="width:40%; height:auto;">-->
-        <!--            </div>-->
         {% endif %}
 
         {% if fitness_goal =='gain' %}
@@ -278,7 +278,9 @@
                     <div class="card-body">
                         <h3 class="card-title">Pull-ups
                         </h3>
-                        <p class="card-text">Great for burning calories and improving cardiovascular health.</p>
+                        <p class="card-text">Pull-ups are a powerful upper body exercise that builds strength and muscle
+                            mass, making them ideal for individuals looking to gain weight and enhance their
+                            physique.</p>
                     </div>
                 </div>
             </div>
@@ -288,8 +290,9 @@
                          alt="Lift dumbbells">
                     <div class="card-body">
                         <h3 class="card-title">Lift dumbbells</h3>
-                        <p class="card-text">A simple and effective way to increase heart rate and build
-                            strength.</p>
+                        <p class="card-text">
+                            Lifting dumbbells is an effective strength training exercise that helps individuals who want
+                            to gain weight by building muscle mass and increasing overall body strength.</p>
                     </div>
                 </div>
             </div>
@@ -299,8 +302,9 @@
                          alt="Squat">
                     <div class="card-body">
                         <h3 class="card-title">Squat</h3>
-                        <p class="card-text">An excellent workout for coordination, balance, and cardiovascular
-                            fitness.</p>
+                        <p class="card-text">
+                            The squat is a fundamental strength exercise that targets multiple muscle groups, making it
+                            ideal for individuals looking to gain weight by building muscle mass.</p>
                     </div>
                 </div>
             </div>
@@ -312,18 +316,31 @@
 
 
 <script>
-    function calculateBMI() {
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value);
+   function calculateBMI() {
+    const weight = parseFloat(document.getElementById('weight').value);
+    const height = parseFloat(document.getElementById('height').value);
 
-        if (!isNaN(weight) && !isNaN(height) && height > 0) {
-            const heightInMeters = height / 100;
-            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-            document.getElementById('bmiResult').innerText = `BMI: ${bmi}`;
-        } else {
-            document.getElementById('bmiResult').innerText = 'BMI: ';
+    if (!isNaN(weight) && !isNaN(height) && height > 0) {
+        const heightInMeters = height / 100;
+        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+        let category = '';
+
+        if (bmi < 18.5) {
+            category = 'Underweight';
+        } else if (bmi >= 18.5 && bmi <= 24.99) {
+            category = 'Normal';
+        } else if (bmi >= 25 && bmi <= 29.9) {
+            category = 'Overweight';
+        } else if (bmi >= 30) {
+            category = 'Obesity';
         }
+
+        document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${category})`;
+    } else {
+        document.getElementById('bmiResult').innerText = 'BMI: ';
     }
+}
+
 
 
     function copyInputValues() {

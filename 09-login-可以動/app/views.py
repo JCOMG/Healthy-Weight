@@ -1,5 +1,4 @@
-import csv
-import json
+
 import math
 import os
 from datetime import datetime
@@ -53,6 +52,7 @@ def BMR():
     days = None
     if request.method == 'POST':
         formula = request.form['BmrRmr']
+        print(formula)
         gender = request.form['gender']
         weight = float(request.form['weight'])
         session['weight'] = weight
@@ -61,10 +61,8 @@ def BMR():
         age = int(request.form['age'])
         session['age'] = age
         activity_level = request.form['activity_level']
-        # 儘管在 HTML 表單中您定義的選項值是數字（如 "1.2"），但當這些數據通過表單提交到後端時，它們仍然會被處理為字符串。
-        days = request.form['days']
+        days = int(request.form['days'])
         fitness_goal = request.form['fitness_goal']
-        print(fitness_goal)
         session['fitness_goal'] = fitness_goal
         session['BmrRmr'] = formula
         session['gender'] = gender
@@ -74,16 +72,23 @@ def BMR():
         session['activity_level'] = activity_level
         session['days'] = days
         nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal)
-        # 假設初步的脂肪質量和無脂肪質量，這些值通常需要更精確的測量或估計
-        initial_fat_mass = weight * 0.25  # 脂肪
-        # initial_ffm = weight * 0.75  # 無脂肪是肌肉跟、骨骼、水分、器官等。
-        new_weight = calculate_weight_change(nutrients['tdee'], days, initial_fat_mass,
-                                             nutrients['calories'], gender, weight, height, age)
 
-    # 使用這個函數來計算預測的體重變化
+        new_weight = dynamic_weight_change(formula, gender, weight, height, age, activity_level, nutrients['calories'],
+                                           days, fitness_goal)
 
     return render_template('index.html', nutrients=nutrients, days=days, new_weight=new_weight,
-                           )
+                           fitness_goal=fitness_goal)
+
+
+def calculate_bmr(gender, weight, height, age):
+    if gender == "male":
+        return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+    else:
+        return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+
+
+def calculate_tdee(bmr, activity_level):
+    return bmr * float(activity_level)
 
 
 def calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal):
@@ -91,19 +96,25 @@ def calculate_nutrients(formula, gender, weight, height, age, activity_level, fi
     bmr = 0
     rmr = 0
     tdee = 0
-    if formula == "BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984":
+    if formula == "BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984)":
         if gender == "male":
             bmr = 88.362 + (weight * 13.397) + (height * 4.799) - (age * 5.677)
         else:
             bmr = 447.593 + (weight * 9.247) + (height * 3.098) - (age * 4.330)
+        print(bmr)
 
-    if formula == "RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)":
+    elif formula == "BMR formula :Mifflin-St. Jeor in 1990":  # 修正字串中的空格
+        if gender == "male":
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5
+        else:
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161
+        print(bmr)
 
+    elif formula == "RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)":
         if gender == "male":
             rmr = (9.65 * weight + 5.73 * height) - 5.08 * age + 260
         else:
             rmr = (7.38 * weight + 6.07 * height) - 2.31 * age + 43
-
     # Total daily energy expenditure
     if bmr > 0:
         tdee = bmr * float(activity_level)
@@ -118,48 +129,210 @@ def calculate_nutrients(formula, gender, weight, height, age, activity_level, fi
 
     # Adjust total calories based on fitness goal
     if fitness_goal == "gain":
-        recommend_tdee_calrie = tdee + 300  # increase 300 grams for 能量缺口
-        print(f"recommend : {recommend_tdee_calrie}")
+        recommend_tdee_calorie = tdee + 300  # increase 300 grams for 能量缺口
+        print(f"recommend : {recommend_tdee_calorie}")
         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 56% 是一個中間值，符合大多數健康飲食指南。
         protein = weight * 1.2
         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
         fat = (tdee * 0.25) / 9  # 9 calories per gram
         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 29% 同樣是一個中間值，符合多數健康飲食的建議範圍。
-        carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
-        carbs = (recommend_tdee_calrie * carbs_percent) / 4
+        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs = (recommend_tdee_calorie * carbs_percent) / 4
     elif fitness_goal == "lose":
         # total_calories_perday = tdee * 0.85  # 減少 15% 的熱量以助於減脂
-        recommend_tdee_calrie = tdee - 300  # decrease 300 grams for 能量缺口
+        recommend_tdee_calorie = tdee - 300  # decrease 300 grams for 能量缺口
 
         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 50% 是一個中間值，符合大多數健康飲食指南。
         protein = weight * 1.2
         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
         fat = (tdee * 0.25) / 9  # 9 calories per gram
-        carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
-        carbs = (recommend_tdee_calrie * carbs_percent) / 4  # 4 calories per gram
+        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs = (recommend_tdee_calorie * carbs_percent) / 4  # 4 calories per gram
         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 30% 同樣是一個中間值，符合多數健康飲食的建議範圍。
     else:  # "maintain"
-        recommend_tdee_calrie = tdee  # 維持目前的熱量攝入
+        recommend_tdee_calorie = tdee  # 維持目前的熱量攝入
         # Nutrient breakdown
         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 50% 是一個中間值，符合大多數健康飲食指南。
         protein = weight * 1.2
         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
         fat = (tdee * 0.25) / 9  # 9 calories per gram
         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 30% 同樣是一個中間值，符合多數健康飲食的建議範圍。
-        carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
-        carbs = (recommend_tdee_calrie * carbs_percent) / 4  # 4 calories per gram
-    print(recommend_tdee_calrie)
+        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs = (recommend_tdee_calorie * carbs_percent) / 4  # 4 calories per gram
+
+    print(recommend_tdee_calorie)
     print(tdee)
     return {
-        'calories': round(recommend_tdee_calrie),  # round 對數字進行四捨五入處理
+        'calories': round(recommend_tdee_calorie),  # round 對數字進行四捨五入處理
         'carbs': round(carbs),
         'protein': round(protein),
         'fat': round(fat),
         'bmr': round(bmr),
         'rmr': round(rmr),
         'tdee': round(tdee),
-        'RECOMMEND CALORIE INTAKE': round(recommend_tdee_calrie)
+        'RECOMMEND CALORIE INTAKE': round(recommend_tdee_calorie)
     }
+
+
+def dynamic_weight_change(formula, gender, weight, height, age, activity_level, calories_intake, days, fitness_goal):
+    # Ensure exact string matching and initialization
+    if formula == "BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984)":
+        bmr = calculate_bmr(gender, weight, height, age)
+        tdee = calculate_tdee(bmr, activity_level)
+    elif formula == "RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)":
+        if gender == "male":
+            rmr = (9.65 * weight + 5.73 * height) - 5.08 * age + 260
+        else:
+            rmr = (7.38 * weight + 6.07 * height) - 2.31 * age + 43
+        tdee = calculate_tdee(rmr, activity_level)
+    elif formula == "BMR formula :Mifflin-St. Jeor in 1990":  # 修正字串中的空格
+        if gender == "male":
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5
+        else:
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161
+        tdee = calculate_tdee(bmr, activity_level)
+    else:
+        raise ValueError("Invalid formula provided.")
+
+    weight_changes = []
+
+    for day in range(days):
+        metabolic_adaptation = 0.90 if weight / ((height / 100) ** 2) > 30 else 1.0
+        adjusted_tdee = tdee * metabolic_adaptation
+        daily_energy_deficit = calories_intake - adjusted_tdee
+        weight_change = daily_energy_deficit / 7700
+        print(weight_change)
+        weight += weight_change
+
+        # if formula == "BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984":
+        #     bmr = calculate_bmr(gender, weight, height, age)
+        #     tdee = calculate_tdee(bmr, activity_level)
+        # elif formula == "RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)":
+        #     if gender == "male":
+        #         rmr = (9.65 * weight + 5.73 * height) - 5.08 * age + 260
+        #     else:
+        #         rmr = (7.38 * weight + 6.07 * height) - 2.31 * age + 43
+        #     tdee = calculate_tdee(rmr, activity_level)
+
+        weight_changes.append(weight)
+
+    return weight_changes[-1]
+
+
+# @app.route('/Calculate_BMR', methods=['GET', 'POST'])
+# def BMR():
+#     new_weight = 0
+#     nutrients = True
+#     days = None
+#     if request.method == 'POST':
+#         formula = request.form['BmrRmr']
+#         gender = request.form['gender']
+#         weight = float(request.form['weight'])
+#         session['weight'] = weight
+#         height = float(request.form['height'])
+#         session['height'] = height
+#         age = int(request.form['age'])
+#         session['age'] = age
+#         activity_level = request.form['activity_level']
+#         # 儘管在 HTML 表單中您定義的選項值是數字（如 "1.2"），但當這些數據通過表單提交到後端時，它們仍然會被處理為字符串。
+#         days = request.form['days']
+#         fitness_goal = request.form['fitness_goal']
+#         print(fitness_goal)
+#         session['fitness_goal'] = fitness_goal
+#         session['BmrRmr'] = formula
+#         session['gender'] = gender
+#         session['weight'] = weight
+#         session['height'] = height
+#         session['age'] = age
+#         session['activity_level'] = activity_level
+#         session['days'] = days
+#         nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal)
+#         # 假設初步的脂肪質量和無脂肪質量，這些值通常需要更精確的測量或估計
+#         initial_fat_mass = weight * 0.25  # 脂肪
+#         # initial_ffm = weight * 0.75  # 無脂肪是肌肉跟、骨骼、水分、器官等。
+#         new_weight = calculate_weight_change(nutrients['tdee'], days, initial_fat_mass,
+#                                              nutrients['calories'], gender, weight, height, age)
+#
+#     # 使用這個函數來計算預測的體重變化
+#
+#     return render_template('index.html', nutrients=nutrients, days=days, new_weight=new_weight,
+#                            fitness_goal=fitness_goal)
+#
+#
+# def calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal):
+#     # Calculate BMR or RMR
+#     bmr = 0
+#     rmr = 0
+#     tdee = 0
+#     if formula == "BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984":
+#         if gender == "male":
+#             bmr = 88.362 + (weight * 13.397) + (height * 4.799) - (age * 5.677)
+#         else:
+#             bmr = 447.593 + (weight * 9.247) + (height * 3.098) - (age * 4.330)
+#
+#     if formula == "RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)":
+#
+#         if gender == "male":
+#             rmr = (9.65 * weight + 5.73 * height) - 5.08 * age + 260
+#         else:
+#             rmr = (7.38 * weight + 6.07 * height) - 2.31 * age + 43
+#
+#     # Total daily energy expenditure
+#     if bmr > 0:
+#         tdee = bmr * float(activity_level)
+#     else:
+#         bmr = 0
+#     if rmr > 0:
+#         tdee = rmr * float(activity_level)
+#     else:
+#         rmr = 0
+#     print(f"tdee : {tdee}")
+#     # Total calories over the period
+#
+#     # Adjust total calories based on fitness goal
+#     if fitness_goal == "gain":
+#         recommend_tdee_calrie = tdee + 300  # increase 300 grams for 能量缺口
+#         print(f"recommend : {recommend_tdee_calrie}")
+#         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 56% 是一個中間值，符合大多數健康飲食指南。
+#         protein = weight * 1.2
+#         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
+#         fat = (tdee * 0.25) / 9  # 9 calories per gram
+#         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 29% 同樣是一個中間值，符合多數健康飲食的建議範圍。
+#         carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
+#         carbs = (recommend_tdee_calrie * carbs_percent) / 4
+#     elif fitness_goal == "lose":
+#         # total_calories_perday = tdee * 0.85  # 減少 15% 的熱量以助於減脂
+#         recommend_tdee_calrie = tdee - 300  # decrease 300 grams for 能量缺口
+#
+#         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 50% 是一個中間值，符合大多數健康飲食指南。
+#         protein = weight * 1.2
+#         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
+#         fat = (tdee * 0.25) / 9  # 9 calories per gram
+#         carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
+#         carbs = (recommend_tdee_calrie * carbs_percent) / 4  # 4 calories per gram
+#         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 30% 同樣是一個中間值，符合多數健康飲食的建議範圍。
+#     else:  # "maintain"
+#         recommend_tdee_calrie = tdee  # 維持目前的熱量攝入
+#         # Nutrient breakdown
+#         # 碳水化合物是人體主要的能量來源，通常建議佔每日總熱量的 45% 至 65%。這裡的 50% 是一個中間值，符合大多數健康飲食指南。
+#         protein = weight * 1.2
+#         # 通常建議蛋白質佔每日總熱量的 10% 至 35%。
+#         fat = (tdee * 0.25) / 9  # 9 calories per gram
+#         # 一般建議脂肪佔每日總熱量的 20% 至 35%。這裡的 30% 同樣是一個中間值，符合多數健康飲食的建議範圍。
+#         carbs_percent = (recommend_tdee_calrie - protein * 4 - fat * 9) / recommend_tdee_calrie  # 4 calories per gram
+#         carbs = (recommend_tdee_calrie * carbs_percent) / 4  # 4 calories per gram
+#     print(recommend_tdee_calrie)
+#     print(tdee)
+#     return {
+#         'calories': round(recommend_tdee_calrie),  # round 對數字進行四捨五入處理
+#         'carbs': round(carbs),
+#         'protein': round(protein),
+#         'fat': round(fat),
+#         'bmr': round(bmr),
+#         'rmr': round(rmr),
+#         'tdee': round(tdee),
+#         'RECOMMEND CALORIE INTAKE': round(recommend_tdee_calrie)
+#     }
 
 
 # 在體重減少的過程中，身體會首先動員脂肪儲備來提供能量，因此脂肪質量通常會減少。
@@ -193,14 +366,21 @@ def calculate_weight_change(tdee, days, initial_fat_mass, total_calories, gender
         return new_weight
     else:  # 減重情況
         new_fat_mass = initial_fat_mass - abs(change_in_fat_mass)
-    print(new_fat_mass)
-    new_ffm = calculate_ffm(new_fat_mass, gender)  # 使用福布斯方程式計算新的無脂肪質量
-    print(new_ffm)
-    new_weight = new_fat_mass + new_ffm
+        if new_fat_mass < 0:
+            new_fat_mass = 0.1
+        new_ffm = calculate_ffm(new_fat_mass, gender)
+        new_weight = new_fat_mass + new_ffm
+
     return new_weight
+    # print(new_fat_mass)
+    # new_fat_mass = max(new_fat_mass, 0.1)  # 確保脂肪質量不為負
+    # new_ffm = calculate_ffm(new_fat_mass, gender)  # 使用福布斯方程式計算新的無脂肪質量
+    # print(new_ffm)
+    # new_weight = new_fat_mass + new_ffm
+    # return new_weight
 
 
-# 获取当前脚本所在目录
+# get current path
 current_dir = os.path.dirname(__file__)
 model_path = os.path.join(current_dir, "fine_tuned_model")
 
@@ -217,10 +397,18 @@ def diet_journal():
 
     nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, hidden_fitness_goal)
 
-    carbs = nutrients['carbs']
-    protein = nutrients['protein']
-    fat = nutrients['fat']
+    # carbs = nutrients['carbs']
+    # protein = nutrients['protein']
+    # fat = nutrients['fat']
+    carbs = nutrients.get('carbs')
+    protein = nutrients.get('protein')
+    fat = nutrients.get('fat')
 
+    session['carbs'] = carbs
+    session['protein'] = protein
+    session['fat'] = fat
+
+    print(f"carbs : {carbs} fat : {fat} protein {protein}")
     dataset_diet = os.path.join(current_dir, "epi_r.csv")
     data_diet = pd.read_csv(dataset_diet, encoding='unicode_escape')
     form = UploadPicturesForm()
@@ -256,7 +444,9 @@ def diet_journal():
     return render_template('Diet Journal.html', form=form, hidden_fitness_goal=hidden_fitness_goal,
                            recommends=session['recommends'], total_carbs=session.get('total_carbs', 0),
                            total_protein=session.get('total_protein', 0),
-                           total_fat=session.get('total_fat', 0))
+                           total_fat=session.get('total_fat', 0), carbs=session.get('carbs', 0),
+                           protein=session.get('protein', 0),
+                           fat=session.get('fat', 0))
 
 
 @app.route('/delete_product', methods=['POST'])
@@ -395,7 +585,6 @@ def history():
     if not user:
         user = User.query.filter_by(username=session['username']).first()
     print(user)
-    # user_food_history = FoodLog.query.filter_by(user_id=user.user_id).all()
     user_food_history = FoodLog.query.filter_by(user_id=user.user_id).all()
     # 假設 FoodLog 有 date 和 food_item 欄位
     food_history_details = []
@@ -414,7 +603,8 @@ def history():
     # for detail in food_history_details:
     #     print(f"日期: {detail['date']}, 食物name: {detail['food_name']}")
 
-    return render_template("FoodHistory.html",food_history_details=food_history_details)
+    return render_template("FoodHistory.html", food_history_details=food_history_details)
+
 
 @app.route('/Upload_Barcode', methods=['GET', 'POST'])
 def upload_barcode():
@@ -443,7 +633,9 @@ def upload_barcode():
                     session['results_dinner'] = results
                 else:
                     return redirect(url_for('diet_journal'))
-    return render_template('Diet Journal.html', form=form)
+    return render_template('Diet Journal.html', form=form, carbs=session.get('carbs', 0),
+                           protein=session.get('protein', 0),
+                           fat=session.get('fat', 0))
 
 
 def save_picture(form_picture):

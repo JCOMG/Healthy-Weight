@@ -1,4 +1,5 @@
 {% block content %}
+
 <header class="site-header">
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-custom">
         <a class="navbar-brand" href="{{ url_for('index') }}">
@@ -219,7 +220,24 @@
     background-color: #0056b3;
     transform: translateY(-2px);
 }
+/* 隱藏原本的文件輸入 */
+        input[type="file"] {
+            display: none;
+        }
 
+        /* 自定義上傳按鈕的樣式 */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
@@ -263,11 +281,14 @@
             {{ form.hidden_tag() }}
             <input type="hidden" name="meal" value="breakfast">
             <div class="form-group">
-                {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_breakfast"
-                ) }}
+                <label for="picture_file_breakfast" class="custom-file-upload">
+                    Upload File
+                </label>
+                <input type="file" id="picture_file_breakfast" name="picture_file">
             </div>
+
             <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
+                <button class="btn btn-primary">Upload</button>
             </div>
         </form>
 
@@ -313,11 +334,14 @@
             {{ form.hidden_tag() }}
             <input type="hidden" name="meal" value="lunch">
             <div class="form-group">
-                {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_lunch"
-                ) }}
+                <label for="picture_file_lunch" class="custom-file-upload">
+                    Upload File
+                </label>
+                <input type="file" id="picture_file_lunch" name="picture_file">
             </div>
+
             <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
+                <button class="btn btn-primary">Upload</button>
             </div>
         </form>
 
@@ -361,12 +385,14 @@
             {{ form.hidden_tag() }}
             <input type="hidden" name="meal" value="dinner">
             <div class="form-group">
-                {{ form.picture_file.label }}{{ form.picture_file(class="form-control", id="picture_file_dinner"
-                ) }}
-
+                <label for="picture_file_dinner" class="custom-file-upload">
+                    Upload File
+                </label>
+                <input type="file" id="picture_file_dinner" name="picture_file">
             </div>
+
             <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
+                <button class="btn btn-primary">Upload</button>
             </div>
         </form>
 
@@ -405,7 +431,7 @@
             <div class="progress mb-3" style="height: 30px;">
                 <div class="progress-bar bg-info" role="progressbar" style="width: {{ total_carbs }}%;"
                      aria-valuenow="{{ total_carbs }}" aria-valuemin="0" aria-valuemax="100">
-                    carbohydrates: {{ total_carbs }} g
+                    carbohydrates: {{ total_carbs }} / {{carbs}} g
                 </div>
             </div>
             {% endif %}
@@ -414,7 +440,7 @@
             <div class="progress mb-3" style="height: 30px;">
                 <div class="progress-bar bg-success" role="progressbar" style="width: {{ total_protein }}%;"
                      aria-valuenow="{{ total_protein }}" aria-valuemin="0" aria-valuemax="100">
-                    protein: {{ total_protein }} g
+                    protein: {{ total_protein }}/{{protein}} g
                 </div>
             </div>
             {% endif %}
@@ -423,7 +449,7 @@
             <div class="progress mb-3" style="height: 30px;">
                 <div class="progress-bar bg-warning" role="progressbar" style="width: {{ total_fat }}%;"
                      aria-valuenow="{{ total_fat }}" aria-valuemin="0" aria-valuemax="100">
-                    fat: {{ total_fat }} g
+                    fat: {{ total_fat }}/{{fat}} g
                 </div>
             </div>
             {% endif %}
