@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        /* Add your CSS styling here */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .profile_nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile_nav li {
+            margin: 0 10px;
+            cursor: pointer;
+            padding: 10px;
+            color: #007bff;
+        }
+
+        .profile_nav .active {
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .user-info_avatar img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .posts img {
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .posts li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bg-float {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div id="profile" class="profile">
+            <div class="user-info">
+                <div class="user-info_avatar">
+                    <img src="http://placehold.it/250x250" alt="User Avatar"/>
+                </div>
+                <h2>{{ name }}</h2>
+                <div class="profile_nav">
+                    <ul>
+                        <li @click="view = 'profile-about'; active = 'about'"
+                            v-bind:class="{active: active === 'about' }">ABOUT</li>
+                        <li @click="view = 'profile-posts'; active='posts'"
+                            v-bind:class="{active: active === 'posts' }">POSTS</li>
+                        <li @click="view = 'profile-contact'; active='contact'"
+                            v-bind:class="{active: active === 'contact' }">CONTACT</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <span class="bg-float">
+                    {{ active }}
+                </span>
+                <transition name="slide-fade" mode="out-in">
+                    <keep-alive>
+                        <component :is="view"></component>
+                    </keep-alive>
+                </transition>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vue.js Templates -->
+    <script type="text/x-template" id="profile-about">
+        <div>
+            <h3>About</h3>
+            <p>This section contains information about the user.</p>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="profile-posts">
+        <div>
+            <h3>Posts</h3>
+            <ul class="posts">
+                <li v-for="n in 3">
+                    <img src="http://placehold.it/75X75" alt="" class="tn"/>
+                    <h4>Post Title {{ n }}</h4>
+                </li>
+            </ul>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="profile-contact">
+        <div>
+            <h3>Contact</h3>
+            <p>You can contact the user via email or social media.</p>
+        </div>
+    </script>
+
+    <!-- Vue.js Initialization -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        Vue.component('profile-about', {
+            template: '#profile-about'
+        });
+
+        Vue.component('profile-posts', {
+            template: '#profile-posts'
+        });
+
+        Vue.component('profile-contact', {
+            template: '#profile-contact'
+        });
+
+        const profile = new Vue({
+            el: '#profile',
+            data: {
+                view: 'profile-about',
+                active: 'about',
+                name: 'Mark Rigby'
+            }
+        });
+    </script>
+</body>
+</html>

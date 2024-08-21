@@ -238,6 +238,10 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+        .progress-bar-text {
+    font-size:  10 %;
+}
+
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
@@ -430,7 +434,7 @@
             {% if total_carbs %}
             <div class="progress mb-3" style="height: 30px;">
                 <div class="progress-bar bg-info" role="progressbar" style="width: {{ total_carbs }}%;"
-                     aria-valuenow="{{ total_carbs }}" aria-valuemin="0" aria-valuemax="100">
+                     aria-valuenow="{{ total_carbs }}" aria-valuemin="0" aria-valuemax="1000">
                     carbohydrates: {{ total_carbs }} / {{carbs}} g
                 </div>
             </div>

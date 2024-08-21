@@ -5,63 +5,66 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-
-    .information-section {
-        margin-top: 0px; /* 列表項間隔 */
-
+    .form-group {
+        margin-top: 200px;
     }
 
-    .nutrition-section {
-        margin-top: 0px; /* 列表項間隔 */
+        .information-section {
+            margin-top: 0px; /* 列表項間隔 */
+
+        }
+
+        .nutrition-section {
+            margin-top: 0px; /* 列表項間隔 */
+
+        }
+        .nutrition-section h2, .nutrition-section h3 {
+            color: #2a6496; /* 標題顏色 */
+        }
+        .nutrition-section ul {
+            list-style-type: none; /* 移除列表符號 */
+            padding: 0;
+        }
+        .nutrition-section li {
+            background-color: #e8eff5; /* 列表項背景色 */
+            padding: 10px; /* 列表項內邊距 */
+            margin-bottom: 5px; /* 列表項間隔 */
+            border-radius: 5px; /* 列表項圓角 */
+            font-weight: bold; /* 文字加粗 */
+        }
+        .tdee-info {
+            display: none; /* 隱藏 TDEE 解釋 */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+        }
+
+        .RECOMMEND-info{
+            display: none; /
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+
+        }
+
+    .tooltiptext {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        border-bottom: 1px dotted red; /* Red color for warning */
+        color: red; /* Red color for the text */
+        font-weight: bold; /* Bold text */
 
     }
-    .nutrition-section h2, .nutrition-section h3 {
-        color: #2a6496; /* 標題顏色 */
-    }
-    .nutrition-section ul {
-        list-style-type: none; /* 移除列表符號 */
-        padding: 0;
-    }
-    .nutrition-section li {
-        background-color: #e8eff5; /* 列表項背景色 */
-        padding: 10px; /* 列表項內邊距 */
-        margin-bottom: 5px; /* 列表項間隔 */
-        border-radius: 5px; /* 列表項圓角 */
-        font-weight: bold; /* 文字加粗 */
-    }
-    .tdee-info {
-        display: none; /* 隱藏 TDEE 解釋 */
-        margin-top: 10px;
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-left: 3px solid #007bff;
-    }
-
-    .RECOMMEND-info{
-        display: none; /
-        margin-top: 10px;
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-left: 3px solid #007bff;
-
-    }
-
-.tooltiptext {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    border-bottom: 1px dotted red; /* Red color for warning */
-    color: red; /* Red color for the text */
-    font-weight: bold; /* Bold text */
-
-}
-    .times-info {
-        display: none;
-        margin-top: 10px;
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-left: 3px solid #007bff;
-    }
+        .times-info {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+        }
 
 </style>
 
@@ -76,19 +79,15 @@
                        style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
                 is BMR?</strong><br>
                 <br><span style="font-size: 20px;">
-              Basal metabolic rate (BMR) refers to the minimum energy expenditure required by a person to maintain life activities in a resting state without eating and when the ambient temperature is suitable. This includes energy requirements to maintain breathing, heartbeat, body temperature, and other basic physiological functions.
- Example:
- Assuming a 30-year-old man weighs 70 kilograms and is 175 centimeters tall, his BMR may be about 1685 kcal/day. This means that even if he does nothing all day long, his body will consume these calories to maintain basic life activities.
+              BMR (Basal Metabolic Rate) is the energy your body needs to maintain basic functions like breathing and heartbeat while at rest. For example, a 30-year-old man weighing 70 kg and 175 cm tall has a BMR of around 1685 kcal/day, which his body uses just to stay alive, even without any activity
         </span>
                 <br>
             </p>
             <p><strong class="highlight"
                        style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
                 is RMR?</strong><br><span style="font-size: 20px;">
-             Resting metabolic rate (RMR) is similar to basal metabolic rate, but the measurement conditions are more relaxed and usually refers to the metabolic rate in a non-sleeping, relaxed state. It is slightly higher than the basal metabolic rate because it includes the energy required for light activities such as sitting, standing, small movements, etc.
- Example:
- Using the same 30-year-old male, if he sat most of the time and engaged in light activity, his RMR would probably be about 1900 kcal/day. This means that his body will burn these calories throughout the day even if he is not doing any strenuous activity.
-                </span>
+
+RMR (Resting Metabolic Rate) is similar to BMR but measured under more relaxed conditions, including light activities like sitting or standing. For a 30-year-old man, 70 kg, and 175 cm tall, his RMR might be around 1900 kcal/day, which his body burns even with minimal activity                </span>
             </p>
             <br>
         </div>
@@ -101,12 +100,6 @@
 
         </form>
     </div>
-    <!--    <meta charset="UTF-8">-->
-    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-    <!--    <h1>Barcode Scanner</h1>-->
-    <!--    <form action="/video" method="post">-->
-    <!--        <button type="submit">Start Scanning</button>-->
-    <!--    </form>-->
 
     <div class="AllSection">
         <div class="information-section" id="information-section">
@@ -115,7 +108,7 @@
                 Choose Formula : <select name="BmrRmr">
                 <option value="" selected>Please Choose</option>
                 <option>BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984)</option>
-                <option>BMR formula :Mifflin-St. Jeor  in 1990</option>
+                <option>BMR formula :Mifflin-St. Jeor in 1990</option>
                 <option>RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)</option>
             </select><br>
 
@@ -316,65 +309,65 @@
 
 
 <script>
-   function calculateBMI() {
-    const weight = parseFloat(document.getElementById('weight').value);
-    const height = parseFloat(document.getElementById('height').value);
+    function calculateBMI() {
+     const weight = parseFloat(document.getElementById('weight').value);
+     const height = parseFloat(document.getElementById('height').value);
 
-    if (!isNaN(weight) && !isNaN(height) && height > 0) {
-        const heightInMeters = height / 100;
-        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-        let category = '';
+     if (!isNaN(weight) && !isNaN(height) && height > 0) {
+         const heightInMeters = height / 100;
+         const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+         let category = '';
 
-        if (bmi < 18.5) {
-            category = 'Underweight';
-        } else if (bmi >= 18.5 && bmi <= 24.99) {
-            category = 'Normal';
-        } else if (bmi >= 25 && bmi <= 29.9) {
-            category = 'Overweight';
-        } else if (bmi >= 30) {
-            category = 'Obesity';
-        }
+         if (bmi < 18.5) {
+             category = 'Underweight';
+         } else if (bmi >= 18.5 && bmi <= 24.99) {
+             category = 'Normal';
+         } else if (bmi >= 25 && bmi <= 29.9) {
+             category = 'Overweight';
+         } else if (bmi >= 30) {
+             category = 'Obesity';
+         }
 
-        document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${category})`;
-    } else {
-        document.getElementById('bmiResult').innerText = 'BMI: ';
-    }
-}
-
-
-
-    function copyInputValues() {
-        document.getElementById('hidden_weight').value = document.getElementById('weight').value;
-        document.getElementById('hidden_height').value = document.getElementById('height').value;
-    }
+         document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${category})`;
+     } else {
+         document.getElementById('bmiResult').innerText = 'BMI: ';
+     }
+ }
 
 
-    function toggleTIMESInfo() {
-    var TIMESINFO = document.getElementById('times-info');
-    if (TIMESINFO.style.display === 'none' || TIMESINFO.style.display === '') {
-    TIMESINFO.style.display = 'block';
-    } else {
-    TIMESINFO.style.display = 'none';
-    }
-    }
 
-    function toggleTDEEInfo() {
-    var tdeeInfo = document.getElementById('tdee-info');
-    if (tdeeInfo.style.display === 'none' || tdeeInfo.style.display === '') {
-    tdeeInfo.style.display = 'block';
-    } else {
-    tdeeInfo.style.display = 'none';
-    }
-    }
+     function copyInputValues() {
+         document.getElementById('hidden_weight').value = document.getElementById('weight').value;
+         document.getElementById('hidden_height').value = document.getElementById('height').value;
+     }
 
-    function toggleRECOMMEND() {
-    var RECOMMENDinfo = document.getElementById('RECOMMEND-info');
-    if (RECOMMENDinfo.style.display === 'none' || RECOMMENDinfo.style.display === '') {
-    RECOMMENDinfo.style.display = 'block';
-    } else {
-    RECOMMENDinfo.style.display = 'none';
-    }
-    }
+
+     function toggleTIMESInfo() {
+     var TIMESINFO = document.getElementById('times-info');
+     if (TIMESINFO.style.display === 'none' || TIMESINFO.style.display === '') {
+     TIMESINFO.style.display = 'block';
+     } else {
+     TIMESINFO.style.display = 'none';
+     }
+     }
+
+     function toggleTDEEInfo() {
+     var tdeeInfo = document.getElementById('tdee-info');
+     if (tdeeInfo.style.display === 'none' || tdeeInfo.style.display === '') {
+     tdeeInfo.style.display = 'block';
+     } else {
+     tdeeInfo.style.display = 'none';
+     }
+     }
+
+     function toggleRECOMMEND() {
+     var RECOMMENDinfo = document.getElementById('RECOMMEND-info');
+     if (RECOMMENDinfo.style.display === 'none' || RECOMMENDinfo.style.display === '') {
+     RECOMMENDinfo.style.display = 'block';
+     } else {
+     RECOMMENDinfo.style.display = 'none';
+     }
+     }
 </script>
 {% endblock %}
 

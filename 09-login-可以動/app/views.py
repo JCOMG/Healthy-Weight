@@ -1,4 +1,3 @@
-
 import math
 import os
 from datetime import datetime
@@ -1003,76 +1002,6 @@ def search_food(barcode):
     return []
 
 
-# @app.route('/Choose', methods=['GET', 'POST'])
-# def choose():
-#     if request.method == 'POST':
-#         index_Breakfast = None
-#         index_Lunch = None
-#         index_Dinner = None
-#         product_name_Breakfast = None
-#         product_name_Lunch = None
-#         product_name_Dinner = None
-#         print(123)
-#         if request.form.get("Choose"):
-#             index_Breakfast = request.form.get("Choose")  # 從表單獲取搜索關鍵字
-#             print(index_Breakfast)
-#             product_name_Breakfast = request.form.get(f"product_name_{index_Breakfast}")
-#             print(product_name_Breakfast)
-#         elif request.form.get("barcode_Lunch"):  # 從表單獲取搜索關鍵字
-#             index_Lunch = request.form.get("barcode_Lunch")  # 從表單獲取搜索關鍵字
-#             product_name_Lunch = request.form.get(f"product_name_{index_Lunch}")
-#         else:
-#             index_Dinner = request.form.get("barcode_Dinner")  # 從表單獲取搜索關鍵字
-#             product_name_Dinner = request.form.get(f"product_name_{index_Dinner}")
-#
-#         carbohydrates_Breakfast = float(request.form.get(f"carbohydrates_{index_Breakfast}", 0))
-#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
-#         fat_Breakfast = float(request.form.get(f"fat_{index_Breakfast}", 0))
-#         protein_Breakfast = float(request.form.get(f"protein_{index_Breakfast}", 0))
-#
-#         carbohydrates_Lunch = float(request.form.get(f"carbohydrates_{index_Lunch}", 0))
-#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
-#         fat_Lunch = float(request.form.get(f"fat_{index_Lunch}", 0))
-#         protein_Lunch = float(request.form.get(f"protein_{index_Lunch}", 0))
-#
-#         carbohydrates_Dinner = float(request.form.get(f"carbohydrates_{index_Dinner}", 0))
-#         # 使用索引來定位具體的產品資料。這些數據被轉換為浮點數，以便於後續的計算。如果沒有找到對應的值，則默認為0。
-#         fat_Dinner = float(request.form.get(f"fat_{index_Dinner}", 0))
-#         protein_Dinner = float(request.form.get(f"protein_{index_Dinner}", 0))
-#
-#         # 累加值到 session
-#
-#         session['total_carbs'] = session.get('total_carbs',
-#                                              0) + carbohydrates_Breakfast + carbohydrates_Lunch + carbohydrates_Dinner
-#         # session.get('total_carbs', 0) 是一個用於從 session 中取出名為 total_carbs的值的方法。
-#         # 如果 session 中存在  total_carbs 這個鍵，則會返回其對應的值。如果不存在，則默認返回0。
-#         # 當從表單獲取到的新 carbohydrates 值讀取後，程式將這個新值加到先前的 total_carbs 上（如果之前沒有設定，則從0開始加）。
-#         session['total_fat'] = session.get('total_fat', 0) + fat_Breakfast + fat_Lunch + fat_Dinner
-#         session['total_protein'] = session.get('total_protein', 0) + protein_Breakfast + protein_Lunch + protein_Dinner
-#
-#         # 儲存當前產品名稱，或者可以改為儲存所有產品的列表
-#         if product_name_Breakfast:
-#             session['last_product'] = product_name_Breakfast
-#         elif product_name_Lunch:
-#             session['last_product'] = product_name_Lunch
-#         else:
-#             session['last_product'] = product_name_Dinner
-#
-#     return render_template('Diet Journal.html', product_name_Breakfast=product_name_Breakfast,
-#                            carbohydrates_Breakfast=carbohydrates_Breakfast, fat_Breakfast=fat_Breakfast,
-#                            protein_Breakfast=protein_Breakfast,
-#                            product_name_Lunch=product_name_Lunch,
-#                            carbohydrates_Lunch=carbohydrates_Lunch,
-#                            fat_Lunch=fat_Lunch,
-#                            protein_Lunch=protein_Lunch,
-#                            product_name_Dinner=product_name_Dinner,
-#                            carbohydrates_Dinner=carbohydrates_Dinner,
-#                            fat_Dinner=fat_Dinner,
-#                            protein_Dinner=protein_Dinner,
-#                            total_carbs=session.get('total_carbs', 0),
-#                            total_fat=session.get('total_fat', 0),
-#                            total_protein=session.get('total_protein', 0))
-
 
 @app.route('/Choose', methods=['GET', 'POST'])
 def choose():
@@ -1188,6 +1117,17 @@ def chat():
     user_input = request.json.get('message')
     response = client.send_request(client.draft_message(user_input), stream=False)
     return jsonify({'answer': response['content']})
+
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 
 
 @app.errorhandler(413)

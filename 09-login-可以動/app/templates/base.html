@@ -17,6 +17,21 @@
     <title>Library App </title>
     {% endif %}
     <style>
+        .chatbot-popup {
+            width: 500px; /* 你可以根据需要调整宽度值 */
+            max-width: 100%; /* 确保宽度不会超过容器的最大宽度 */
+            padding: 10px; /* 添加一些内边距以使内容不贴边 */
+            box-sizing: border-box; /* 确保 padding 包含在宽度内 */
+        }
+
+    #chatbot-button .chatbox__image {
+        width: 50px; /* 根据需要调整宽度 */
+        height: auto; /* 自动调整高度以保持图片比例 */
+        max-width: 100%; /* 确保图片不会超过容器的宽度 */
+        display: block; /* 确保图片占据整个按钮的宽度 */
+        margin: 0 auto; /* 居中对齐图片 */
+    }
+
 
     </style>
 </head>
@@ -248,7 +263,7 @@
                         <i class="far fa-envelope-open"></i>
                         <div class="cta-text">
                             <h4>Mail us</h4>
-                            <span>user@gamil.com</span>
+                            <span>jimmy1999928@gamil.com</span>
                         </div>
                     </div>
                 </div>
@@ -262,11 +277,6 @@
                             <img src="/static/profile_pics/Logo2.png" class="card-img-top rounded-top" alt="Running">
 
                         </div>
-                        <div class="footer-text">
-                            <p>Lorem ipsum dolor sit amet, consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididuntut consec tetur adipisicing
-                                elit,Lorem ipsum dolor sit amet.</p>
-                        </div>
                         <div class="footer-social-icon">
                             <span>Follow us</span>
                             <a href="#"><i class="fab fa-facebook-f facebook-bg"></i></a>
@@ -277,20 +287,21 @@
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
                     <div class="footer-widget">
-                        <div class="footer-widget-heading">
-                            <h3>Useful Links</h3>
-                        </div>
+<!--                        <div class="footer-widget-heading">-->
+<!--                            <h3>Useful Links</h3>-->
+<!--                        </div>-->
                         <ul>
                             <li><a href="#">Home</a></li>
-                            <li><a href="#">about</a></li>
+                            <li><a href="{{ url_for('about') }}">About</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
                     <div class="footer-widget">
-                        <div class="footer-widget-heading">
+<!--                        <div class="footer-widget-heading">-->
                             <h3>Subscribe</h3>
-                        </div>
+<!--                        </div>-->
                         <div class="footer-text mb-25">
                             <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
                         </div>
@@ -314,10 +325,7 @@
                     <div class="footer-menu">
                         <ul>
                             <li><a href="{{ url_for('index') }}">Home</a></li>
-                            <li><a href="#">Terms</a></li>
-                            <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Policy</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="{{ url_for('contact')}}">Contact</a></li>
                         </ul>
                     </div>
                 </div>
