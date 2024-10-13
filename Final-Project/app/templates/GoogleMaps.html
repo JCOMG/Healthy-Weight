@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Neighborhood Discovery</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/handlebars/4.7.7/handlebars.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li {
+            float: left;
+        }
+
+        nav ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        #map {
+            height: 100vh;
+            width: 70%;
+            float: left;
+        }
+
+        #directions-panel {
+            height: 100vh;
+            width: 30%;
+            float: right;
+            overflow: auto;
+        }
+    </style>
+    <script>
+        let map, directionsService, directionsRenderer;
+
+        function initMap() {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                polylineOptions: {
+                    strokeColor: 'black'
+                }
+            });
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    console.log("User location:", userLocation);
+
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: userLocation,
+                        zoom: 14
+                    });
+
+                    directionsRenderer.setMap(map);
+                    directionsRenderer.setPanel(document.getElementById('directions-panel'));
+
+                    var userMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'You are here',
+                        icon: {
+                            url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        }
+                    });
+
+                    var service = new google.maps.places.PlacesService(map);
+
+                    service.nearbySearch({
+                        location: userLocation,
+                        radius: 15000,
+                        type: ['gym']
+                    }, function(results, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            for (var i = 0; i < results.length; i++) {
+                                var place = results[i];
+                                var marker = new google.maps.Marker({
+                                    position: place.geometry.location,
+                                    map: map,
+                                    title: place.name
+                                });
+
+                                google.maps.event.addListener(marker, 'click', (function(marker, place) {
+                                    return function() {
+                                        var request = {
+                                            placeId: place.place_id,
+                                            fields: ['name', 'formatted_address', 'place_id', 'geometry', 'rating', 'opening_hours']
+                                        };
+
+                                        service.getDetails(request, function(details, status) {
+                                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                                var content = document.createElement('div');
+                                                var nameElement = document.createElement('h2');
+                                                nameElement.textContent = details.name;
+                                                content.appendChild(nameElement);
+
+                                                var placeIdElement = document.createElement('p');
+                                                placeIdElement.textContent = 'Place ID: ' + details.place_id;
+                                                content.appendChild(placeIdElement);
+
+                                                var placeAddressElement = document.createElement('p');
+                                                placeAddressElement.textContent = details.formatted_address;
+                                                content.appendChild(placeAddressElement);
+
+                                                var ratingElement = document.createElement('p');
+                                                ratingElement.textContent = 'Rating: ' + (details.rating || 'N/A');
+                                                content.appendChild(ratingElement);
+
+                                                if (details.opening_hours) {
+                                                    var hoursElement = document.createElement('p');
+                                                    hoursElement.textContent = 'Hours: ' + details.opening_hours.weekday_text.join(', ');
+                                                    content.appendChild(hoursElement);
+                                                }
+
+                                                var infowindow = new google.maps.InfoWindow();
+                                                infowindow.setContent(content);
+                                                infowindow.open(map, marker);
+
+
+                                                calculateAndDisplayRoute(userLocation, details.geometry.location);
+                                            }
+                                        });
+                                    };
+                                })(marker, place));
+                            }
+                        } else {
+                            console.error('PlacesService status: ' + status);
+                        }
+                    });
+                }, function(error) {
+                    console.error('Error occurred. Error code: ' + error.code);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: 43.4142989, lng: -124.2301242},
+                        zoom: 4
+                    });
+                });
+            } else {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 43.4142989, lng: -124.2301242},
+                    zoom: 4
+                });
+            }
+        }
+
+        function calculateAndDisplayRoute(origin, destination) {
+            directionsService.route(
+                {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING
+                },
+                (response, status) => {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsRenderer.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                }
+            );
+        }
+
+        window.initMap = initMap;
+    </script>
+</head>
+<body>
+<nav>
+    <ul>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+        </li>
+    </ul>
+</nav>
+<div id="map"></div>
+<div id="directions-panel"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAb5nxW_WUizlEfUrhgkiX92J5JnMCQuI&callback=initMap&libraries=places,directions&language=en"
+        async defer></script>
+</body>
+</html>

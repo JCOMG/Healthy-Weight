@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .form-container {
+        margin-left: 600px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+    }
+    .form-input, .form-submit, .btn-danger {
+        margin: 10px 0;
+        padding: 8px;
+        width: 95%;
+        box-sizing: border-box;
+    }
+    ul {
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="form-container">
+    <form method="POST" action="/Choose">
+        <input type="text" name="barcode" placeholder="Enter Barcode，EX：3017620422003" class="form-input">
+        <input type="submit" value="Search" class="form-submit">
+        {% if products %}
+        <ul>
+            {% for product in products %}
+            <li>{{ product['product_name'] }} - carbohydrates：{{ product['carbohydrates'] }}g, fat：{{ product['fat'] }}g,
+                protein：{{ product['protein'] }}g
+                <input type="hidden" name="product_name_{{ loop.index }}" value="{{ product['product_name'] }}">
+                <input type="hidden" name="carbohydrates_{{ loop.index }}" value="{{ product['carbohydrates'] }}">
+                <input type="hidden" name="fat_{{ loop.index }}" value="{{ product['fat'] }}">
+                <input type="hidden" name="protein_{{ loop.index }}" value="{{ product['protein'] }}">
+                <button type="submit" name="Choose" value="{{ loop.index }}" class="btn btn-danger"
+                        onclick="return confirm('Are You sure？')">Choose
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No related product information was found.</p>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}

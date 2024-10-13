@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .form-group {
+        margin-top: 200px;
+    }
+
+        .information-section {
+            margin-top: 0px;
+
+        }
+
+        .nutrition-section {
+            margin-top: 0px;
+
+        }
+        .nutrition-section h2, .nutrition-section h3 {
+            color: #2a6496;
+        }
+        .nutrition-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .nutrition-section li {
+            background-color: #e8eff5;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .tdee-info {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+        }
+
+        .RECOMMEND-info{
+            display: none; /
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+
+        }
+
+    .tooltiptext {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        border-bottom: 1px dotted red; /* Red color for warning */
+        color: red; /* Red color for the text */
+        font-weight: bold;
+    }
+        .times-info {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+        }
+
+</style>
+
+
+<div class="index-container">
+    <div class="fruit-basket-container">
+        <h1>Hello!</h1><br>
+
+        <div class="info-section" style="border-left: 0px solid #2a6496;">
+            <p><strong class="highlight"
+                       style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
+                is BMR?</strong><br>
+                <br><span style="font-size: 20px;">
+              BMR (Basal Metabolic Rate) is the energy your body needs to maintain basic functions like breathing and heartbeat while at rest. For example, a 30-year-old man weighing 70 kg and 175 cm tall has a BMR of around 1685 kcal/day, which his body uses just to stay alive, even without any activity
+        </span>
+                <br>
+            </p>
+            <p><strong class="highlight"
+                       style="color: #000000; font-weight: bold; font-style: italic; font-size: 30px;">What
+                is RMR?</strong><br><span style="font-size: 20px;">
+
+RMR (Resting Metabolic Rate) is similar to BMR but measured under more relaxed conditions, including light activities like sitting or standing. For a 30-year-old man, 70 kg, and 175 cm tall, his RMR might be around 1900 kcal/day, which his body burns even with minimal activity                </span>
+            </p>
+            <br>
+        </div>
+        <form method="POST" action="/show_Body_status">
+            <button type="submit" name="Choose" class="btn btn-danger"
+                    onclick=" return confirm('Are you sure ?')" style="font-size: 20px;"> Want to calculate BMR or RMR ?
+                Click
+                here
+            </button>
+
+        </form>
+    </div>
+
+    <div class="AllSection">
+        <div class="information-section" id="information-section">
+            {% if show %}
+            <form method="POST" action="/Calculate_BMR" class="form-group">
+                Choose Formula : <select name="BmrRmr">
+                <option value="" selected>Please Choose</option>
+                <option>BMR formula : The Harris-Benedict Equation (revised by Roza and Shizgal in 1984)</option>
+                <option>BMR formula :Mifflin-St. Jeor in 1990</option>
+                <option>RMR formula : Pavlidou (Proposed New Equations), in kcal/d (2022)</option>
+            </select><br>
+
+                Physical Gender: <select name="gender">
+                <option value="" selected>Please Choose</option>
+                <option>male</option>
+                <option>female</option>
+            </select><br>
+
+                Weight (kg): <input type="number" name="weight" id="weight" placeholder="Weight (kg)" step="0.01"
+                                    oninput="calculateBMI()"><br>
+                Height (cm): <input type="number" name="height" id="height" placeholder="Height (cm)" step="0.01"
+                                    oninput="calculateBMI()"><br>
+                <h2 id="bmiResult">BMI: </h2>
+                Age: <input type="number" name="age" placeholder="age ex:18" required><br>
+                Activity Level: <select name="activity_level">
+                <option value="" selected>Please Choose</option>
+                <option value="1.2">Long Seat</option>
+                <option value="1.375">Mild activity ( 1 or 2 days a week)</option>
+                <option value="1.55">Moderate activities ( 3 or 4 days a week)</option>
+                <option value="1.725">High intensity activity ( 5+ days a week)</option>
+            </select><br>
+                Fitness Goal: <select name="fitness_goal">
+                <option value="" selected>Please Choose</option>
+                <option value="gain"> Gain weight</option>
+                <option value="lose"> Lose weight</option>
+                <option value="maintain"> Maintain Weight</option>
+            </select><br>
+                Desired time Enter how many days (AT LEAST 31 DAYS): <input type="number" name="days"
+                                                                            placeholder="AT LEAST 31 DAYS"><br>
+                <a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
+                   onclick="toggleTIMESInfo()">※ Why Desired time at least 1 month or more ?</a>
+                <div class="times-info" id="times-info">
+                    Weight changes in a short period of time may be affected by many factors, such as water intake,
+                    sodium consumption( like salt), digestive conditions and so on. These short-term changes will cause
+                    greater interference in the prediction results, and data over a longer period of time can better
+                    reflect the actual trend in weight change.
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="nutrition-section">
+            {% if nutrients %}
+            <h2>In <span style="color: #007bff; font-weight: bold; font-size: 45px;">{{ days }}</span> days</h2>
+            <h3>Your nutritional recommendations:</h3>
+            <ul>
+                {% if nutrients['bmr'] %}
+                <li>BMR: <span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['bmr'] }} </span>Calorie
+                </li>
+                {% else %}
+                <li>RMR: <span style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['rmr'] }}</span>
+                    Calorie
+                </li>
+                {% endif %}
+                <li> TDEE :<span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;"> {{ nutrients['tdee'] }} </span>calorie
+                <li><a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
+                       onclick="toggleTDEEInfo()">※ What is TDEE?</a></li>
+                <div class="tdee-info" id="tdee-info">
+                    TDEE stands for total daily energy expenditure. It is the total energy that a person uses in a day.
+                </div>
+                <li>RECOMMEND CALORIE INTAKE :<span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;"> {{ nutrients['RECOMMEND CALORIE INTAKE'] }} </span>calorie
+                </li>
+                <li><a href="javascript:void(0);" style="color: #000000; font-weight: bold; font-size: 20px;"
+                       onclick="toggleRECOMMEND()">※ Why RECOMMEND CALORIE INTAKE </a>
+                </li>
+                <div class="RECOMMEND-info" id="RECOMMEND-info">
+                    Recommending calorie intake is crucial for managing weight effectively because it provides a
+                    structured approach to achieving specific health goals. For instance, individuals aiming to lose
+                    weight may have a typical daily intake of 2000 calories, but a recommended intake of 1700 calories
+                    creates a caloric deficit, which helps in weight loss. Conversely, those looking to gain weight
+                    might have a normal intake of 2000 calories, but increasing their intake to 2300 calories ensures a
+                    caloric surplus, promoting weight gain. By adjusting the recommended calorie intake based on
+                    individual goals, we can create personalized plans that facilitate healthy and sustainable weight
+                    management.
+                </div>
+                <li>carbohydrate: <span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['carbs'] }}</span> g
+                </li>
+                <li>protein: <span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['protein'] }}</span> g
+                </li>
+                <li>fat: <span style="color: #007bff; font-weight: bold; font-size: 25px;">{{ nutrients['fat'] }}</span>
+                    g
+                </li>
+                <li>Future weight: <span
+                        style="color: #007bff; font-weight: bold; font-size: 25px;">{{ new_weight }}</span>
+                    kg
+                    <br><br><span
+                            class="tooltiptext">※ Future weight is only a rough prediction. In reality, it still depends on the individual's innate factors and daily activity level.</span>
+                </li>
+
+
+            </ul>
+            <form method="POST" action="/DietJournal" onsubmit="copyInputValues()">
+                <input type="hidden" name="fitness_goal" value="{{ fitness_goal }}">
+                <input type="hidden" name="BmrRmr" value="{{ BmrRmr }}">
+                <input type="hidden" name="gender" value="{{ gender }}">
+                <input type="hidden" name="age" value="{{ age }}">
+                <input type="hidden" name="weight" id="hidden_weight">
+                <input type="hidden" name="height" id="hidden_height">
+                <input type="hidden" name="activity_level" value="{{ activity_level }}">
+                <button type="submit" class="btn btn-primary mt-3">Want to make a plan ?</button>
+            </form>
+            {% endif %}
+
+            {% if fitness_goal =='lose'%}
+            <h2 class="text-center my-4">Cardio Suggestion</h2>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="/static/profile_pics/cardio1.jpg" class="card-img-top rounded-top" alt="Running">
+                        <div class="card-body">
+                            <h3 class="card-title">Running</h3>
+                            <p class="card-text">Great for burning calories and improving cardiovascular health.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="/static/profile_pics/cardio_stairs.jpeg" class="card-img-top rounded-top"
+                             alt="Stairs">
+                        <div class="card-body">
+                            <h3 class="card-title">Stairs</h3>
+                            <p class="card-text">A simple and effective way to increase heart rate and build
+                                strength.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="/static/profile_pics/cardio_jump_rope.jpeg" class="card-img-top rounded-top"
+                             alt="Jump Rope">
+                        <div class="card-body">
+                            <h3 class="card-title">Jump Rope</h3>
+                            <p class="card-text">An excellent workout for coordination, balance, and cardiovascular
+                                fitness.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+        {% if fitness_goal =='gain' %}
+        <h2 class="text-center my-4">Gain Weight Exercise Suggestion</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="/static/profile_pics/heavy training-pullups.jpg" class="card-img-top rounded-top" alt="pull-ups
+">
+                    <div class="card-body">
+                        <h3 class="card-title">Pull-ups
+                        </h3>
+                        <p class="card-text">Pull-ups are a powerful upper body exercise that builds strength and muscle
+                            mass, making them ideal for individuals looking to gain weight and enhance their
+                            physique.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="/static/profile_pics/Lift dumbbells.jpg" class="card-img-top rounded-top"
+                         alt="Lift dumbbells">
+                    <div class="card-body">
+                        <h3 class="card-title">Lift dumbbells</h3>
+                        <p class="card-text">
+                            Lifting dumbbells is an effective strength training exercise that helps individuals who want
+                            to gain weight by building muscle mass and increasing overall body strength.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="/static/profile_pics/squat.jpg" class="card-img-top rounded-top"
+                         alt="Squat">
+                    <div class="card-body">
+                        <h3 class="card-title">Squat</h3>
+                        <p class="card-text">
+                            The squat is a fundamental strength exercise that targets multiple muscle groups, making it
+                            ideal for individuals looking to gain weight by building muscle mass.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+
+<script>
+    function calculateBMI() {
+     const weight = parseFloat(document.getElementById('weight').value);
+     const height = parseFloat(document.getElementById('height').value);
+
+     if (!isNaN(weight) && !isNaN(height) && height > 0) {
+         const heightInMeters = height / 100;
+         const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+         let category = '';
+
+         if (bmi < 18.5) {
+             category = 'Underweight';
+         } else if (bmi >= 18.5 && bmi <= 24.99) {
+             category = 'Normal';
+         } else if (bmi >= 25 && bmi <= 29.9) {
+             category = 'Overweight';
+         } else if (bmi >= 30) {
+             category = 'Obesity';
+         }
+
+         document.getElementById('bmiResult').innerText = `BMI: ${bmi} (${category})`;
+     } else {
+         document.getElementById('bmiResult').innerText = 'BMI: ';
+     }
+ }
+
+
+
+     function copyInputValues() {
+         document.getElementById('hidden_weight').value = document.getElementById('weight').value;
+         document.getElementById('hidden_height').value = document.getElementById('height').value;
+     }
+
+
+     function toggleTIMESInfo() {
+     var TIMESINFO = document.getElementById('times-info');
+     if (TIMESINFO.style.display === 'none' || TIMESINFO.style.display === '') {
+     TIMESINFO.style.display = 'block';
+     } else {
+     TIMESINFO.style.display = 'none';
+     }
+     }
+
+     function toggleTDEEInfo() {
+     var tdeeInfo = document.getElementById('tdee-info');
+     if (tdeeInfo.style.display === 'none' || tdeeInfo.style.display === '') {
+     tdeeInfo.style.display = 'block';
+     } else {
+     tdeeInfo.style.display = 'none';
+     }
+     }
+
+     function toggleRECOMMEND() {
+     var RECOMMENDinfo = document.getElementById('RECOMMEND-info');
+     if (RECOMMENDinfo.style.display === 'none' || RECOMMENDinfo.style.display === '') {
+     RECOMMENDinfo.style.display = 'block';
+     } else {
+     RECOMMENDinfo.style.display = 'none';
+     }
+     }
+</script>
+{% endblock %}
+
