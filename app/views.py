@@ -66,7 +66,8 @@ def BMR():
         session['age'] = age
         session['activity_level'] = activity_level
         session['days'] = days
-        nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, fitness_goal)
+        nutrients = calculate_nutrients(
+            formula, gender, weight, height, age, activity_level, fitness_goal)
 
         new_weight = round(
             dynamic_weight_change(formula, gender, weight, height, age, activity_level, nutrients['calories'],
@@ -126,22 +127,27 @@ def calculate_nutrients(formula, gender, weight, height, age, activity_level, fi
         print(f"recommend : {recommend_tdee_calorie}")
         protein = weight * 1.2
         fat = (tdee * 0.25) / 9  # 9 calories per gram
-        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs_percent = (recommend_tdee_calorie - protein * 4 -
+                         fat * 9) / recommend_tdee_calorie  # 4 calories per gram
         carbs = (recommend_tdee_calorie * carbs_percent) / 4
     elif fitness_goal == "lose":
         recommend_tdee_calorie = tdee - 300  # decrease 300 grams for energy deficit
 
         protein = weight * 1.2
         fat = (tdee * 0.25) / 9  # 9 calories per gram
-        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
-        carbs = (recommend_tdee_calorie * carbs_percent) / 4  # 4 calories per gram
+        carbs_percent = (recommend_tdee_calorie - protein * 4 -
+                         fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs = (recommend_tdee_calorie * carbs_percent) / \
+            4  # 4 calories per gram
     else:  # "maintain"
         recommend_tdee_calorie = tdee
         # Nutrient breakdown
         protein = weight * 1.2
         fat = (tdee * 0.25) / 9  # 9 calories per gram
-        carbs_percent = (recommend_tdee_calorie - protein * 4 - fat * 9) / recommend_tdee_calorie  # 4 calories per gram
-        carbs = (recommend_tdee_calorie * carbs_percent) / 4  # 4 calories per gram
+        carbs_percent = (recommend_tdee_calorie - protein * 4 -
+                         fat * 9) / recommend_tdee_calorie  # 4 calories per gram
+        carbs = (recommend_tdee_calorie * carbs_percent) / \
+            4  # 4 calories per gram
 
     print(recommend_tdee_calorie)
     print(tdee)
@@ -238,7 +244,8 @@ def diet_journal():
     age = session.get('age')
     activity_level = session.get('activity_level')
 
-    nutrients = calculate_nutrients(formula, gender, weight, height, age, activity_level, hidden_fitness_goal)
+    nutrients = calculate_nutrients(
+        formula, gender, weight, height, age, activity_level, hidden_fitness_goal)
 
     carbs = nutrients.get('carbs')
     protein = nutrients.get('protein')
@@ -254,17 +261,20 @@ def diet_journal():
     form = UploadPicturesForm()
     recommends = pd.DataFrame()
 
-    data_diet['calories'] = pd.to_numeric(data_diet['calories'], errors='coerce')
+    data_diet['calories'] = pd.to_numeric(
+        data_diet['calories'], errors='coerce')
     data_diet['protein'] = pd.to_numeric(data_diet['protein'], errors='coerce')
     data_diet['fat'] = pd.to_numeric(data_diet['fat'], errors='coerce')
-    data_diet['carbs'] = data_diet['calories'] - data_diet['protein'] * 4 - data_diet['fat'] * 9
+    data_diet['carbs'] = data_diet['calories'] - \
+        data_diet['protein'] * 4 - data_diet['fat'] * 9
     print(data_diet)
     if hidden_fitness_goal == 'lose':
         selected_foods = data_diet[
             (data_diet['carbs'] <= carbs) & (data_diet['protein'] <= protein) & (data_diet['fat'] <= fat)]
         recommends = selected_foods.sample(n=5)
         print(recommends)
-        recommends_recipe = recommends[['title', 'calories', 'protein', 'fat', 'carbs']]
+        recommends_recipe = recommends[[
+            'title', 'calories', 'protein', 'fat', 'carbs']]
         recommends_dict = recommends_recipe.to_dict(orient='records')
         if 'recommends_dict' not in session:
             session['recommends'] = recommends_dict
@@ -274,13 +284,15 @@ def diet_journal():
             (data_diet['carbs'] >= carbs) & (data_diet['protein'] >= protein) & (data_diet['fat'] >= fat)]
         recommends = selected_foods.sample(n=5)
         print(recommends)
-        recommends_recipe = recommends[['title', 'calories', 'protein', 'fat', 'carbs']]
+        recommends_recipe = recommends[[
+            'title', 'calories', 'protein', 'fat', 'carbs']]
         recommends_dict = recommends_recipe.to_dict(orient='records')
         if 'recommends_dict' not in session:
             session['recommends'] = recommends_dict
 
     return render_template('Diet Journal.html', form=form, hidden_fitness_goal=hidden_fitness_goal,
-                           recommends=session['recommends'], total_carbs=session.get('total_carbs', 0),
+                           recommends=session['recommends'], total_carbs=session.get(
+                               'total_carbs', 0),
                            total_protein=session.get('total_protein', 0),
                            total_fat=session.get('total_fat', 0), carbs=session.get('carbs', 0),
                            protein=session.get('protein', 0),
@@ -416,7 +428,8 @@ def upload_barcode():
     if form.validate_on_submit():
         if form.picture_file.data:
             unique_str = str(uuid4())
-            filename = secure_filename(f'{unique_str}-{form.picture_file.data.filename}')
+            filename = secure_filename(
+                f'{unique_str}-{form.picture_file.data.filename}')
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.picture_file.data.save(filepath)
             image = Image.open(filepath)
@@ -445,7 +458,8 @@ def save_picture(form_picture):
     random_hex = uuid4().hex
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(
+        app.root_path, 'static/profile_pics', picture_fn)
 
     form_picture.save(picture_path)
     return picture_fn
@@ -457,7 +471,8 @@ def upload_pictures():
     if form.validate_on_submit():
         if form.picture_file.data:
             unique_str = str(uuid4())
-            filename = secure_filename(f'{unique_str}-{form.picture_file.data.filename}')
+            filename = secure_filename(
+                f'{unique_str}-{form.picture_file.data.filename}')
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.picture_file.data.save(filepath)
             db.session.commit()
@@ -481,21 +496,25 @@ def account_status():
         current_user.email = form.email.data
 
         if form.password.data:
-            current_user.password_hash = generate_password_hash(form.password.data, salt_length=32)
+            current_user.password_hash = generate_password_hash(
+                form.password.data, salt_length=32)
         try:
             db.session.commit()
             flash('Your ac  count has been updated!', 'success')
         except:
             db.session.rollback()
             if User.query.filter_by(username=form.username.data):
-                form.username.errors.append('This username is already taken. Please choose another')
+                form.username.errors.append(
+                    'This username is already taken. Please choose another')
             if User.query.filter_by(email=form.email.data):
-                form.email.errors.append('This email address is already registered. Please choose another')
+                form.email.errors.append(
+                    'This email address is already registered. Please choose another')
             flash('Account update failed', 'danger')
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for(
+        'static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', form=form, image_file=image_file)
 
 
@@ -571,7 +590,8 @@ def authorize():
 @app.route('/logout')
 def logout():
     logout_user()
-    session.pop('user_id', None)  # session.clear() may cause some issues so use pop will be safe
+    # session.clear() may cause some issues so use pop will be safe
+    session.pop('user_id', None)
     session.pop('token', None)
     session.pop('total_carbs', None)
     session.pop('total_fat', None)
@@ -602,20 +622,24 @@ def forgot_password():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        existing_user = User.query.filter_by(username=form.username.data).first()
+        existing_user = User.query.filter_by(
+            username=form.username.data).first()
         if existing_user:
             flash('Username already exists. Please choose a different one.', 'danger')
         else:
             try:
                 hash_password = generate_password_hash(form.password.data)
-                user1 = User(username=form.username.data, email=form.email.data, password_hash=hash_password)
+                user1 = User(username=form.username.data,
+                             email=form.email.data, password_hash=hash_password)
                 db.session.add(user1)
                 db.session.commit()
-                flash(f'Registration for {form.username.data} received', 'success')
+                flash(f'Registration for {
+                      form.username.data} received', 'success')
                 return redirect(url_for('index'))
             except IntegrityError:
                 db.session.rollback()
-                flash('An error occurred. The username might already be taken. Please try a different one.', 'danger')
+                flash(
+                    'An error occurred. The username might already be taken. Please try a different one.', 'danger')
     return render_template('registration.html', title='Register', form=form)
 
 
@@ -652,7 +676,8 @@ def get_food_data():
 
     if request.method == 'POST':
         if request.form.get("barcode_breakfast"):
-            new_products_breakfast = search_food(request.form.get("barcode_breakfast"))
+            new_products_breakfast = search_food(
+                request.form.get("barcode_breakfast"))
             if 'products_breakfast' in session:
                 session['products_breakfast'] += new_products_breakfast
             else:
@@ -664,7 +689,8 @@ def get_food_data():
             else:
                 session['products_lunch'] = new_products_lunch
         if request.form.get("barcode_dinner"):
-            new_products_dinner = search_food(request.form.get("barcode_dinner"))
+            new_products_dinner = search_food(
+                request.form.get("barcode_dinner"))
             if 'products_dinner' in session:
                 session['products_dinner'] += new_products_dinner
             else:
@@ -737,12 +763,14 @@ def get_food_data():
                                products_dinner=products_dinner,
                                total_carbs=total_carbs,
                                total_protein=total_protein,
-                               total_fat=total_fat, form=form, recommends=session.get('recommends', []),
+                               total_fat=total_fat, form=form, recommends=session.get(
+                                   'recommends', []),
                                )
 
 
 def search_food(barcode):
-    response = requests.get(f"https://world.openfoodfacts.org/api/v3/product/{barcode}.json")
+    response = requests.get(
+        f"https://world.openfoodfacts.org/api/v3/product/{barcode}.json")
     if response.status_code == 200:
         try:
             product_data = response.json()['product']
@@ -788,26 +816,33 @@ def choose():
         index_Lunch = request.form.get("barcode_Lunch")
         index_Dinner = request.form.get("barcode_Dinner")
 
-        product_name_Breakfast = request.form.get(f"product_name_{index_Breakfast}")
+        product_name_Breakfast = request.form.get(
+            f"product_name_{index_Breakfast}")
         product_name_Lunch = request.form.get(f"product_name_{index_Lunch}")
         product_name_Dinner = request.form.get(f"product_name_{index_Dinner}")
 
-        carbohydrates_Breakfast = float(request.form.get(f"carbohydrates_{index_Breakfast}", 0))
+        carbohydrates_Breakfast = float(request.form.get(
+            f"carbohydrates_{index_Breakfast}", 0))
         fat_Breakfast = float(request.form.get(f"fat_{index_Breakfast}", 0))
-        protein_Breakfast = float(request.form.get(f"protein_{index_Breakfast}", 0))
+        protein_Breakfast = float(request.form.get(
+            f"protein_{index_Breakfast}", 0))
 
-        carbohydrates_Lunch = float(request.form.get(f"carbohydrates_{index_Lunch}", 0))
+        carbohydrates_Lunch = float(request.form.get(
+            f"carbohydrates_{index_Lunch}", 0))
         fat_Lunch = float(request.form.get(f"fat_{index_Lunch}", 0))
         protein_Lunch = float(request.form.get(f"protein_{index_Lunch}", 0))
 
-        carbohydrates_Dinner = float(request.form.get(f"carbohydrates_{index_Dinner}", 0))
+        carbohydrates_Dinner = float(request.form.get(
+            f"carbohydrates_{index_Dinner}", 0))
         fat_Dinner = float(request.form.get(f"fat_{index_Dinner}", 0))
         protein_Dinner = float(request.form.get(f"protein_{index_Dinner}", 0))
 
         session['total_carbs'] = session.get('total_carbs',
                                              0) + carbohydrates_Breakfast + carbohydrates_Lunch + carbohydrates_Dinner
-        session['total_fat'] = session.get('total_fat', 0) + fat_Breakfast + fat_Lunch + fat_Dinner
-        session['total_protein'] = session.get('total_protein', 0) + protein_Breakfast + protein_Lunch + protein_Dinner
+        session['total_fat'] = session.get(
+            'total_fat', 0) + fat_Breakfast + fat_Lunch + fat_Dinner
+        session['total_protein'] = session.get(
+            'total_protein', 0) + protein_Breakfast + protein_Lunch + protein_Dinner
 
         if product_name_Breakfast:
             session['last_product'] = product_name_Breakfast
@@ -884,13 +919,15 @@ people who wants to gain some healthy knowledge give them some advice.
 people who is struggling with not lose weight enough or gian weight enough give them some emotional support.
 """.strip().replace('\n', '')
 
-client = GroqChatClient(model_id="llama3-8b-8192", system_message=system_message)
+client = GroqChatClient(model_id="llama3-8b-8192",
+                        system_message=system_message)
 
 
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get('message')
-    response = client.send_request(client.draft_message(user_input), stream=False)
+    response = client.send_request(
+        client.draft_message(user_input), stream=False)
     return jsonify({'answer': response['content']})
 
 
