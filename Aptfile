@@ -1,4 +1,4 @@
-build-essential
+make
 gcc
 g++
 libstdc++6
